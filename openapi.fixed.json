@@ -1,0 +1,1350 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Supported registry API for Docker Hub",
+    "description": "Docker Hub is an OCI-compliant registry, which means it adheres to the open\nstandards defined by the Open Container Initiative (OCI) for distributing\ncontainer images. This ensures compatibility with a wide range of tools and\nplatforms in the container ecosystem.\n\nThis reference documents the Docker Hub-supported subset of the Registry HTTP API V2.\nIt focuses on pulling, pushing, and deleting images. It does not cover the full OCI Distribution Specification.\n\nFor the complete OCI specification, see [OCI Distribution Specification](https://github.com/opencontainers/distribution-spec).\n",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://registry-1.docker.io",
+      "description": "Docker Hub registry API"
+    }
+  ],
+  "paths": {
+    "/v2/{name}/manifests/{reference}": {
+      "get": {
+        "tags": [
+          "Manifests"
+        ],
+        "summary": "Get image manifest",
+        "description": "Fetch the manifest identified by `name` and `reference`, where `reference` can be a tag (e.g., `latest`) or a digest (e.g., `sha256:...`).\n\nThe manifest contains metadata about the image, including configuration and layer digests. It is required for pulling images from the registry.\n\nThis endpoint requires authentication. Use the `Authorization: Bearer <token>` header.\n",
+        "operationId": "GetImageManifest",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Name of the target repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "library/ubuntu"
+          },
+          {
+            "name": "reference",
+            "in": "path",
+            "description": "Tag or digest of the target manifest",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "by-tag": {
+                "summary": "Tag",
+                "value": "latest"
+              },
+              "by-digest": {
+                "summary": "Digest",
+                "value": "sha256:abc123def456..."
+              }
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "RFC7235-compliant authorization header (e.g., `Bearer <token>`).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Media type(s) the client supports for the manifest.\n\nThe registry supports the following media types:\n- application/vnd.docker.distribution.manifest.v2+json\n- application/vnd.docker.distribution.manifest.list.v2+json\n- application/vnd.oci.image.manifest.v1+json\n- application/vnd.oci.image.index.v1+json\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Manifest fetched successfully.",
+            "headers": {
+              "Docker-Content-Digest": {
+                "description": "Digest of the returned manifest content.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Type": {
+                "description": "Media type of the returned manifest.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/vnd.docker.distribution.manifest.v2+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetImageManifest200DockerDistributionManifestV2JsonResponse"
+                },
+                "examples": {
+                  "docker-manifest": {
+                    "summary": "Docker image manifest (schema v2)",
+                    "value": {
+                      "schemaVersion": 2,
+                      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+                      "config": {
+                        "mediaType": "application/vnd.docker.container.image.v1+json",
+                        "size": 7023,
+                        "digest": "sha256:123456abcdef..."
+                      },
+                      "layers": [
+                        {
+                          "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+                          "size": 32654,
+                          "digest": "sha256:abcdef123456..."
+                        },
+                        {
+                          "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+                          "size": 16724,
+                          "digest": "sha256:7890abcdef12..."
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid name or reference."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Access denied."
+          },
+          "404": {
+            "description": "Repository or manifest not found."
+          },
+          "429": {
+            "description": "Too many requests."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Manifests"
+        ],
+        "summary": "Put image manifest",
+        "description": "Upload an image manifest for a given tag or digest. This operation registers a manifest in a repository, allowing it to be pulled using the specified reference.\n\nThis endpoint is typically used after all layer and config blobs have been uploaded to the registry.\n\nThe manifest must conform to the expected schema and media type. For Docker image manifest schema version 2, use:\n`application/vnd.docker.distribution.manifest.v2+json`\n\nRequires authentication via a bearer token with `push` scope for the target repository.\n",
+        "operationId": "PutImageManifest",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Name of the target Repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "library/ubuntu"
+          },
+          {
+            "name": "reference",
+            "in": "path",
+            "description": "Tag or digest to associate with the uploaded Manifest",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "by-tag": {
+                "summary": "Tag",
+                "value": "latest"
+              },
+              "by-digest": {
+                "summary": "Digest",
+                "value": "sha256:abc123def456..."
+              }
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "RFC7235-compliant authorization header (e.g., `Bearer <token>`).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Media type of the manifest being uploaded.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "application/vnd.docker.distribution.manifest.v2+json"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.docker.distribution.manifest.v2+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PutImageManifestDockerDistributionManifestV2JsonRequest"
+              },
+              "examples": {
+                "sample-manifest": {
+                  "summary": "Sample Docker image manifest (schema v2)",
+                  "value": {
+                    "schemaVersion": 2,
+                    "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+                    "config": {
+                      "mediaType": "application/vnd.docker.container.image.v1+json",
+                      "size": 7023,
+                      "digest": "sha256:123456abcdef..."
+                    },
+                    "layers": [
+                      {
+                        "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+                        "size": 32654,
+                        "digest": "sha256:abcdef123456..."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Manifest created successfully.",
+            "headers": {
+              "Docker-Content-Digest": {
+                "description": "Digest of the stored manifest.",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "sha256:abcdef123456..."
+              },
+              "Location": {
+                "description": "Canonical location of the uploaded manifest.",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "/v2/library/ubuntu/manifests/latest"
+              },
+              "Content-Length": {
+                "description": "Always zero.",
+                "schema": {
+                  "type": "integer"
+                },
+                "example": 0
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid name, reference, or manifest."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Access denied."
+          },
+          "404": {
+            "description": "Repository not found."
+          },
+          "405": {
+            "description": "Operation not allowed."
+          },
+          "429": {
+            "description": "Too many requests."
+          }
+        }
+      },
+      "head": {
+        "tags": [
+          "Manifests"
+        ],
+        "summary": "Check if manifest exists",
+        "description": "Use this endpoint to verify whether a manifest exists by tag or digest.\n\nThis is a lightweight operation that returns only headers (no body). It is useful for:\n- Checking for the existence of a specific image version\n- Determining the digest or size of a manifest before downloading or deleting\n\nThis endpoint requires authentication with pull scope.\n",
+        "operationId": "HeadImageManifest",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Name of the Repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "library/ubuntu"
+          },
+          {
+            "name": "reference",
+            "in": "path",
+            "description": "Tag or digest to check",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "by-tag": {
+                "summary": "Tag",
+                "value": "latest"
+              },
+              "by-digest": {
+                "summary": "Digest",
+                "value": "sha256:abc123def456..."
+              }
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Media type of the manifest to check. The response will match one of the accepted types.\n",
+            "schema": {
+              "type": "string",
+              "example": "application/vnd.docker.distribution.manifest.v2+json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Manifest exists.",
+            "headers": {
+              "Content-Length": {
+                "description": "Size of the manifest in bytes",
+                "schema": {
+                  "type": "integer"
+                },
+                "example": 7082
+              },
+              "Docker-Content-Digest": {
+                "description": "Digest of the manifest",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "sha256:abc123..."
+              },
+              "Content-Type": {
+                "description": "Media type of the manifest",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/vnd.docker.distribution.manifest.v2+json"
+              }
+            }
+          },
+          "404": {
+            "description": "Manifest not found."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Access denied."
+          },
+          "429": {
+            "description": "Too many requests."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Manifests"
+        ],
+        "summary": "Delete image manifest",
+        "description": "Delete an image manifest from a repository by digest.\n\nOnly untagged or unreferenced manifests can be deleted. If the manifest is still referenced by a tag or another image, the registry will return `403 Forbidden`.\n\nThis operation requires `delete` access to the repository.\n\n> **Note**\n>\n> Manifest deletion operations may take some time and could return a `500 Internal Server Error`. The system automatically retries the deletion in the background. Manual intervention is not required.\n",
+        "operationId": "DeleteImageManifest",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "yourusername/helloworld"
+          },
+          {
+            "name": "reference",
+            "in": "path",
+            "description": "Digest of the manifest to delete (e.g., `sha256:...`)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "sha256:abc123def456..."
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token with `delete` access",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Manifest deleted successfully. No content returned."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Access denied. The manifest may still be referenced."
+          },
+          "404": {
+            "description": "Manifest or repository not found."
+          },
+          "405": {
+            "description": "Only digest-based deletion is allowed."
+          },
+          "429": {
+            "description": "Too many requests."
+          }
+        }
+      }
+    },
+    "/v2/{name}/blobs/uploads": {
+      "post": {
+        "tags": [
+          "Blobs"
+        ],
+        "summary": "Initiate blob upload or attempt cross-repository blob mount",
+        "description": "Initiate an upload session for a blob (layer or config) in a repository.\n\nThis is the first step in uploading a blob. It returns a `Location` URL where the blob can be uploaded using `PATCH` (chunked) or `PUT` (monolithic).\n\nInstead of uploading a blob, a client may attempt to mount a blob from another repository (if it has read access) by including the `mount` and `from` query parameters.\n\nIf successful, the registry responds with `201 Created` and the blob is reused without re-upload.\n\nIf the mount fails, the upload proceeds as usual and returns a `202 Accepted`.\n\nYou must authenticate with `push` access to the target repository.\n",
+        "operationId": "InitiateBlobUpload",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Name of the target repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "library/ubuntu"
+          },
+          {
+            "name": "mount",
+            "in": "query",
+            "description": "Digest of the blob to mount from another repository",
+            "schema": {
+              "type": "string"
+            },
+            "example": "sha256:abc123def456..."
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Source repository to mount the blob from",
+            "schema": {
+              "type": "string"
+            },
+            "example": "library/busybox"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authentication with `push` scope",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Blob successfully mounted from another repository.",
+            "headers": {
+              "Location": {
+                "description": "URL where the mounted blob is accessible",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "/v2/library/ubuntu/blobs/sha256:abc123..."
+              },
+              "Docker-Content-Digest": {
+                "description": "Canonical digest of the mounted blob",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "sha256:abc123..."
+              },
+              "Content-Length": {
+                "description": "Always zero",
+                "schema": {
+                  "type": "integer"
+                },
+                "example": 0
+              }
+            }
+          },
+          "202": {
+            "description": "Upload initiated successfully (fallback if mount fails).",
+            "headers": {
+              "Location": {
+                "description": "Upload location URL for `PATCH` or `PUT` requests",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "/v2/library/ubuntu/blobs/uploads/abc123"
+              },
+              "Docker-Upload-UUID": {
+                "description": "Server-generated UUID for the upload session",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "abc123"
+              },
+              "Range": {
+                "description": "Current upload byte range (typically `0-0` at init)",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "0-0"
+              },
+              "Content-Length": {
+                "description": "Always zero",
+                "schema": {
+                  "type": "integer"
+                },
+                "example": 0
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Access denied."
+          },
+          "404": {
+            "description": "Repository not found."
+          },
+          "429": {
+            "description": "Too many requests."
+          }
+        }
+      }
+    },
+    "/v2/{name}/blobs/{digest}": {
+      "head": {
+        "tags": [
+          "Blobs"
+        ],
+        "summary": "Check existence of blob",
+        "description": "Check whether a blob (layer or config) exists in the registry.\n\nThis is useful before uploading a blob to avoid duplicates.\n\nIf the blob is present, the registry returns a `200 OK` response with headers like `Content-Length` and `Docker-Content-Digest`.\n\nIf the blob does not exist, the response will be `404 Not Found`.\n",
+        "operationId": "CheckBlobExists",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Name of the Repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "library/ubuntu"
+          },
+          {
+            "name": "digest",
+            "in": "path",
+            "description": "Digest of the blob",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "sha256:abc123def4567890..."
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token with pull or push scope",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6..."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blob exists",
+            "headers": {
+              "Content-Length": {
+                "description": "Size of the blob in bytes",
+                "schema": {
+                  "type": "integer"
+                },
+                "example": 32654
+              },
+              "Docker-Content-Digest": {
+                "description": "Digest of the blob",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "sha256:abc123def4567890..."
+              },
+              "Content-Type": {
+                "description": "MIME type of the blob content",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/octet-stream"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Fallback media schema"
+                },
+                "examples": {
+                  "blob-check-request": {
+                    "summary": "Sample request",
+                    "value": {
+                      "method": "HEAD",
+                      "url": "/v2/library/ubuntu/blobs/sha256:abc123def4567890...",
+                      "headers": {
+                        "Authorization": "Bearer <token>",
+                        "Accept": "*/*"
+                      }
+                    }
+                  },
+                  "blob-check-response": {
+                    "summary": "Sample 200 response headers",
+                    "value": {
+                      "status": "200 OK",
+                      "headers": {
+                        "Docker-Content-Digest": "sha256:abc123def4567890...",
+                        "Content-Length": 32654,
+                        "Content-Type": "application/octet-stream"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Blob not found"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Blobs"
+        ],
+        "summary": "Retrieve blob",
+        "description": "Download the blob identified by digest from the registry.\n\nBlobs include image layers and configuration objects. Clients must use the digest from the manifest to retrieve a blob.\n\nThis endpoint may return a `307 Temporary Redirect` to a CDN or storage location. Clients must follow the redirect to obtain the actual blob content.\n\nThe blob content is typically a gzipped tarball (for layers) or JSON (for configs). The MIME type is usually `application/octet-stream`.\n",
+        "operationId": "GetBlob",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Repository Name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "library/ubuntu"
+          },
+          {
+            "name": "digest",
+            "in": "path",
+            "description": "Digest of the Blob",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "sha256:abc123def456..."
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token with pull scope",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6..."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blob content returned directly",
+            "headers": {
+              "Content-Length": {
+                "description": "Size of the blob in bytes",
+                "schema": {
+                  "type": "integer"
+                },
+                "example": 32768
+              },
+              "Content-Type": {
+                "description": "MIME type of the blob",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "application/octet-stream"
+              },
+              "Docker-Content-Digest": {
+                "description": "Digest of the returned blob",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "sha256:abc123def456..."
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBlob200OctetStreamResponse"
+                },
+                "examples": {
+                  "small-layer": {
+                    "summary": "Example binary blob (gzipped tar layer)",
+                    "value": "<binary data not shown>"
+                  }
+                }
+              }
+            }
+          },
+          "307": {
+            "description": "Temporary redirect to blob location",
+            "headers": {
+              "Location": {
+                "description": "Redirect URL for blob download (e.g., S3 or CDN)",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "https://cdn.docker.io/blobs/library/ubuntu/abc123..."
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Blob not found"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        }
+      }
+    },
+    "/v2/{name}/blobs/uploads/{uuid}": {
+      "get": {
+        "tags": [
+          "Blobs"
+        ],
+        "summary": "Get blob upload status",
+        "description": "Retrieve the current status of an in-progress blob upload.\n\nThis is useful for:\n- Resuming an interrupted upload\n- Determining how many bytes have been accepted so far\n- Retrying from the correct offset in chunked uploads\n\nThe response includes the `Range` header indicating the byte range received so far, and a `Docker-Upload-UUID` for identifying the session.\n",
+        "operationId": "GetBlobUploadStatus",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Repository Name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "library/ubuntu"
+          },
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Upload session UUID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "abc123"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer eyJhbGciOi..."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Upload in progress. No body is returned.",
+            "headers": {
+              "Range": {
+                "description": "Current byte range uploaded (inclusive)",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "0-16383"
+              },
+              "Docker-Upload-UUID": {
+                "description": "UUID of the upload session",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "abc123"
+              },
+              "Location": {
+                "description": "URL to continue or complete the upload",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "/v2/library/ubuntu/blobs/uploads/abc123"
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Upload session not found"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Blobs"
+        ],
+        "summary": "Complete blob upload",
+        "description": "Complete the upload of a blob by finalizing an upload session.\n\nThis request must include the `digest` query parameter and optionally the last chunk of data. When the registry receives this request, it verifies the digest and stores the blob.\n\nThis endpoint supports:\n- Monolithic uploads (upload entire blob in this request)\n- Finalizing chunked uploads (last chunk plus `digest`)\n",
+        "operationId": "CompleteBlobUpload",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Repository name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "library/ubuntu"
+          },
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Upload session UUID returned from the POST request",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "abc123"
+          },
+          {
+            "name": "digest",
+            "in": "query",
+            "description": "Digest of the uploaded blob",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "sha256:abcd1234..."
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer eyJhbGciOi..."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteBlobUploadOctetStreamRequest"
+              },
+              "examples": {
+                "layer-upload": {
+                  "summary": "Layer tarball blob",
+                  "value": "<binary data not shown>"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Upload completed successfully",
+            "headers": {
+              "Docker-Content-Digest": {
+                "description": "Canonical digest of the stored blob",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "sha256:abcd1234..."
+              },
+              "Location": {
+                "description": "URL where the blob is now accessible",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "/v2/library/ubuntu/blobs/sha256:abcd1234..."
+              },
+              "Content-Length": {
+                "description": "Always zero for completed uploads",
+                "schema": {
+                  "type": "integer"
+                },
+                "example": 0
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid digest or missing parameters"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Upload session not found"
+          },
+          "416": {
+            "description": "Requested range not satisfiable (if used in chunked mode)"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Blobs"
+        ],
+        "summary": "Upload blob chunk",
+        "description": "Upload a chunk of a blob to an active upload session.\n\nUse this method for **chunked uploads**, especially for large blobs or when resuming interrupted uploads.\n\nThe client sends binary data using `PATCH`, optionally including a `Content-Range` header.\n\nAfter each chunk is accepted, the registry returns a `202 Accepted` response with:\n- `Range`: current byte range stored\n- `Docker-Upload-UUID`: identifier for the upload session\n- `Location`: URL to continue the upload or finalize with `PUT`\n",
+        "operationId": "UploadBlobChunk",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Repository name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "library/ubuntu"
+          },
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Upload session UUID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "abc123"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer eyJhbGciOi..."
+          },
+          {
+            "name": "Content-Range",
+            "in": "header",
+            "description": "Optional. Byte range of the chunk being sent",
+            "schema": {
+              "type": "string"
+            },
+            "example": "bytes 0-65535"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadBlobChunkOctetStreamRequest"
+              },
+              "examples": {
+                "chunk-0": {
+                  "summary": "Upload chunk 0 of a blob",
+                  "value": "<binary data not shown>"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Chunk accepted and stored",
+            "headers": {
+              "Location": {
+                "description": "URL to continue or finalize the upload",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "/v2/library/ubuntu/blobs/uploads/abc123"
+              },
+              "Range": {
+                "description": "Byte range uploaded so far (inclusive)",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "0-65535"
+              },
+              "Docker-Upload-UUID": {
+                "description": "Upload session UUID",
+                "schema": {
+                  "type": "string"
+                },
+                "example": "abc123"
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed content or range"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Upload session not found"
+          },
+          "416": {
+            "description": "Range error (e.g., chunk out of order)"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Blobs"
+        ],
+        "summary": "Cancel blob upload",
+        "description": "Cancel an in-progress blob upload session.\n\nThis operation discards any data that has been uploaded and invalidates the upload session.\n\nUse this when:\n- An upload fails or is aborted mid-process\n- The client wants to clean up unused upload sessions\n\nAfter cancellation, the UUID is no longer valid and a new `POST` must be issued to restart the upload.\n",
+        "operationId": "CancelBlobUpload",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "library/ubuntu"
+          },
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Upload session UUID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "abc123"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer eyJhbGciOi..."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Upload session cancelled successfully. No body is returned.",
+            "headers": {
+              "Content-Length": {
+                "description": "Always zero",
+                "schema": {
+                  "type": "integer"
+                },
+                "example": 0
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Upload session not found"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ExamplePayload": {
+        "type": "object",
+        "description": "Placeholder schema for path example refs"
+      },
+      "GetImageManifest200DockerDistributionManifestV2JsonResponse": {
+        "required": [
+          "schemaVersion",
+          "mediaType",
+          "config",
+          "layers"
+        ],
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "example": 2
+          },
+          "mediaType": {
+            "type": "string",
+            "example": "application/vnd.docker.distribution.manifest.v2+json"
+          },
+          "config": {
+            "$ref": "#/components/schemas/GetImageManifest200DockerDistributionManifestV2JsonResponseConfig"
+          },
+          "layers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetImageManifest200DockerDistributionManifestV2JsonResponseLayersItem"
+            }
+          }
+        }
+      },
+      "PutImageManifestDockerDistributionManifestV2JsonRequest": {
+        "required": [
+          "schemaVersion",
+          "mediaType",
+          "config",
+          "layers"
+        ],
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "example": 2
+          },
+          "mediaType": {
+            "type": "string",
+            "example": "application/vnd.docker.distribution.manifest.v2+json"
+          },
+          "config": {
+            "$ref": "#/components/schemas/PutImageManifestDockerDistributionManifestV2JsonRequestConfig"
+          },
+          "layers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PutImageManifestDockerDistributionManifestV2JsonRequestLayersItem"
+            }
+          }
+        }
+      },
+      "GetBlob200OctetStreamResponse": {
+        "type": "string",
+        "format": "binary"
+      },
+      "CompleteBlobUploadOctetStreamRequest": {
+        "required": [
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "UploadBlobChunkOctetStreamRequest": {
+        "required": [
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "GetImageManifest200DockerDistributionManifestV2JsonResponseConfig": {
+        "type": "object",
+        "properties": {
+          "mediaType": {
+            "type": "string",
+            "example": "application/vnd.docker.container.image.v1+json"
+          },
+          "size": {
+            "type": "integer",
+            "example": 7023
+          },
+          "digest": {
+            "type": "string",
+            "example": "sha256:a3f3e...c1234"
+          }
+        }
+      },
+      "GetImageManifest200DockerDistributionManifestV2JsonResponseLayersItem": {
+        "type": "object",
+        "properties": {
+          "mediaType": {
+            "type": "string",
+            "example": "application/vnd.docker.image.rootfs.diff.tar.gzip"
+          },
+          "size": {
+            "type": "integer",
+            "example": 32654
+          },
+          "digest": {
+            "type": "string",
+            "example": "sha256:bcf2...78901"
+          }
+        }
+      },
+      "PutImageManifestDockerDistributionManifestV2JsonRequestConfig": {
+        "required": [
+          "mediaType",
+          "size",
+          "digest"
+        ],
+        "type": "object",
+        "properties": {
+          "mediaType": {
+            "type": "string",
+            "example": "application/vnd.docker.container.image.v1+json"
+          },
+          "size": {
+            "type": "integer",
+            "example": 7023
+          },
+          "digest": {
+            "type": "string",
+            "example": "sha256:123456abcdef..."
+          }
+        }
+      },
+      "PutImageManifestDockerDistributionManifestV2JsonRequestLayersItem": {
+        "required": [
+          "mediaType",
+          "size",
+          "digest"
+        ],
+        "type": "object",
+        "properties": {
+          "mediaType": {
+            "type": "string",
+            "example": "application/vnd.docker.image.rootfs.diff.tar.gzip"
+          },
+          "size": {
+            "type": "integer",
+            "example": 32654
+          },
+          "digest": {
+            "type": "string",
+            "example": "sha256:abcdef123456..."
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "overview",
+      "description": "All endpoints in this API are prefixed by the version and repository name, for example:\n\n```\n/v2/<name>/\n```\n\nThis format provides structured access control and URI-based scoping of image operations.\n\nFor example, to interact with the `library/ubuntu` repository, use:\n\n```\n/v2/library/ubuntu/\n```\n\nRepository names must meet these requirements:\n1. Consist of path components matching `[a-z0-9]+(?:[._-][a-z0-9]+)*`\n2. If more than one component, they must be separated by `/`\n3. Full repository name must be fewer than 256 characters\n",
+      "x-displayName": "Overview"
+    },
+    {
+      "name": "authentication",
+      "description": "Specifies registry authentication.\n",
+      "externalDocs": {
+        "description": "Detailed authentication workflow and token usage",
+        "url": "https://docs.docker.com/reference/api/registry/auth/"
+      },
+      "x-displayName": "Authentication"
+    },
+    {
+      "name": "Manifests",
+      "description": "Image manifests are JSON documents that describe an image: its configuration blob, the digests of each layer blob, and metadata such as media‑types and annotations.\n",
+      "x-displayName": "Manifests"
+    },
+    {
+      "name": "Blobs",
+      "description": "Blobs are the binary objects referenced from manifests:\nthe config JSON and one or more compressed layer tarballs.\n",
+      "x-displayName": "Blobs"
+    },
+    {
+      "name": "pull",
+      "description": "Pulling an image involves retrieving the manifest and downloading each of the image's layer blobs. This section outlines the general steps followed by a working example.\n\n1. [Get a bearer token for the repository](https://docs.docker.com/reference/api/registry/auth/).\n2. [Get the image manifest](#operation/GetImageManifest).\n3. If the response in the previous step is a multi-architecture manifest list, you must do the following:\n   - Parse the `manifests[]` array to locate the digest for your target platform (e.g., `linux/amd64`).\n   - [Get the image manifest](#operation/GetImageManifest) using the located digest.\n4. [Check if the blob exists](#operation/CheckBlobExists) before downloading. The client should send a `HEAD` request for each layer digest.\n5. [Download each layer blob](#operation/GetBlob) using the digest obtained from the manifest. The client should send a `GET` request for each layer digest.\n\nThe following bash script example pulls `library/ubuntu:latest` from Docker Hub.\n\n```bash\n#!/bin/bash\n\n# Step 1: Get a bearer token\nTOKEN=$(curl -s \"https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/ubuntu:pull\" | jq -r .token)\n\n# Step 2: Get the image manifest. In this example, an image manifest list is returned.\ncurl -s -H \"Authorization: Bearer $TOKEN\" \\\n     -H \"Accept: application/vnd.docker.distribution.manifest.list.v2+json\" \\\n     https://registry-1.docker.io/v2/library/ubuntu/manifests/latest \\\n     -o manifest-list.json\n\n# Step 3a: Parse the `manifests[]` array to locate the digest for your target platform (e.g., `linux/amd64`).\nIMAGE_MANIFEST_DIGEST=$(jq -r '.manifests[] | select(.platform.architecture == \"amd64\" and .platform.os == \"linux\") | .digest' manifest-list.json)\n\n# Step 3b: Get the platform-specific image manifest\ncurl -s -H \"Authorization: Bearer $TOKEN\" \\\n     -H \"Accept: application/vnd.docker.distribution.manifest.v2+json\" \\\n     https://registry-1.docker.io/v2/library/ubuntu/manifests/$IMAGE_MANIFEST_DIGEST \\\n     -o manifest.json\n\n# Step 4: Send a HEAD request to check if the layer blob exists\nDIGEST=$(jq -r '.layers[0].digest' manifest.json)\ncurl -I -H \"Authorization: Bearer $TOKEN\" \\\n     https://registry-1.docker.io/v2/library/ubuntu/blobs/$DIGEST\n\n# Step 5: Download the layer blob\ncurl -L -H \"Authorization: Bearer $TOKEN\" \\\n     https://registry-1.docker.io/v2/library/ubuntu/blobs/$DIGEST\n```\n\nThis example pulls the manifest and the first layer for the `ubuntu:latest` image on the `linux/amd64` platform. Repeat steps 4 and 5 for each digest in the `.layers[]` array in the manifest.\n",
+      "x-displayName": "Pulling Images"
+    },
+    {
+      "name": "push",
+      "description": "Pushing an image involves uploading any image blobs (such as the config or layers), and then uploading the manifest that references those blobs.\n\nThis section outlines the basic steps to push an image using the registry API.\n\n1. [Get a bearer token for the repository](https://docs.docker.com/reference/api/registry/auth/)\n\n2. [Check if the blob exists](#operation/CheckBlobExists) using a `HEAD` request for each blob digest.\n\n3. If the blob does not exist, [upload the blob](#operation/CompleteBlobUpload) using a monolithic `PUT` request:\n    - First, [initiate the upload](#operation/InitiateBlobUpload) with `POST`.\n    - Then [upload and complete](#operation/CompleteBlobUpload) with `PUT`.\n\n    **Note**:  Alternatively, you can upload the blob in multiple chunks by using `PATCH` requests to send each chunk, followed by a final `PUT` request to complete the upload. This is known as a [chunked upload](#operation/UploadBlobChunk) and is useful for large blobs or when resuming interrupted uploads.\n\n\n4. [Upload the image manifest](#operation/PutImageManifest) using a `PUT` request to associate the config and layers.\n\nThe following bash script example pushes a dummy config blob and manifest to `yourusername/helloworld:latest` on Docker Hub. You can replace `yourusername` with your Docker Hub username and `dckr_pat` with your Docker Hub personal access token.\n\n```bash\n#!/bin/bash\n\nUSERNAME=yourusername\nPASSWORD=dckr_pat\nREPO=yourusername/helloworld\nTAG=latest\nCONFIG=config.json\nMIME_TYPE=application/vnd.docker.container.image.v1+json\n\n# Step 1: Get a bearer token\nTOKEN=$(curl -s -u \"$USERNAME:$PASSWORD\" \\\n\"https://auth.docker.io/token?service=registry.docker.io&scope=repository:$REPO:push,pull\" \\\n| jq -r .token)\n\n# Create a dummy config blob and compute its digest\necho '{\"architecture\":\"amd64\",\"os\":\"linux\",\"config\":{},\"rootfs\":{\"type\":\"layers\",\"diff_ids\":[]}}' > $CONFIG\nDIGEST=\"sha256:$(sha256sum $CONFIG | awk '{print $1}')\"\n\n# Step 2: Check if the blob exists\nSTATUS=$(curl -s -o /dev/null -w \"%{http_code}\" -I \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/$REPO/blobs/$DIGEST)\n\nif [ \"$STATUS\" != \"200\" ]; then\n  # Step 3: Upload blob using monolithic upload\n  LOCATION=$(curl -sI -X POST \\\n    -H \"Authorization: Bearer $TOKEN\" \\\n    https://registry-1.docker.io/v2/$REPO/blobs/uploads/ \\\n    | grep -i Location | tr -d '\\r' | awk '{print $2}')\n\n  curl -s -X PUT \"$LOCATION&digest=$DIGEST\" \\\n    -H \"Authorization: Bearer $TOKEN\" \\\n    -H \"Content-Type: application/octet-stream\" \\\n    --data-binary @$CONFIG\nfi\n\n# Step 4: Upload the manifest that references the config blob\nMANIFEST=$(cat <<EOF\n{\n  \"schemaVersion\": 2,\n  \"mediaType\": \"application/vnd.docker.distribution.manifest.v2+json\",\n  \"config\": {\n    \"mediaType\": \"$MIME_TYPE\",\n    \"size\": $(stat -c%s $CONFIG),\n    \"digest\": \"$DIGEST\"\n  },\n  \"layers\": []\n}\nEOF\n)\n\ncurl -s -X PUT \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/vnd.docker.distribution.manifest.v2+json\" \\\n  -d \"$MANIFEST\" \\\n  https://registry-1.docker.io/v2/$REPO/manifests/$TAG\n\necho \"Pushed image to $REPO:$TAG\"\n```\n\nThis example pushes a minimal image with no layers. To push a complete image, repeat steps 2–3 for each layer and include the layer digests in the `layers[]` field of the manifest.\n",
+      "x-displayName": "Pushing Images"
+    },
+    {
+      "name": "delete",
+      "description": "Deleting an image involves removing its manifest by digest. You must first retrieve the manifest digest, then issue a `DELETE` request using that digest.\n\nOnly untagged manifests (or those not referenced by other tags or images) can be deleted. If a manifest is still referenced, the registry returns `403 Forbidden`.\n\n> **Note**\n>\n> Manifest deletion operations may experience latency and could return a `500 Internal Server Error` during deletion. The system automatically retries the deletion in the background, so the manifest will eventually be removed. You do not need to manually retry the request.\n\nThis section outlines the basic steps to delete an image using the registry API.\n\n1. [Get a bearer token for the repository](https://docs.docker.com/reference/api/registry/auth/).\n2. [Get the manifest](#operation/GetImageManifest) using the image's tag.\n3. Retrieve the `Docker-Content-Digest` header from the manifest response. This digest uniquely identifies the manifest.\n4. [Delete the manifest](#operation/DeleteImageManifest) using a `DELETE` request and the digest.\n\nThe following bash script example deletes the `latest` tag from `yourusername/helloworld` on Docker Hub. Replace `yourusername` with your Docker Hub username and `dckr_pat` with your Docker Hub personal access token.\n\n```bash\n#!/bin/bash\n\nUSERNAME=yourusername\nPASSWORD=dckr_pat\nREPO=yourusername/helloworld\nTAG=latest\n\n# Step 1: Get a bearer token\nTOKEN=$(curl -s -u \"$USERNAME:$PASSWORD\" \\\n  \"https://auth.docker.io/token?service=registry.docker.io&scope=repository:$REPO:pull,push,delete\" \\\n  | jq -r .token)\n\n# Step 2 and 3: Get the manifest and extract the digest from response headers\nDIGEST=$(curl -sI -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Accept: application/vnd.docker.distribution.manifest.v2+json\" \\\n  https://registry-1.docker.io/v2/$REPO/manifests/$TAG \\\n  | grep -i Docker-Content-Digest | tr -d '\\r' | awk '{print $2}')\n\necho \"Deleting manifest with digest: $DIGEST\"\n\n# Step 4: Delete the manifest by digest\ncurl -s -X DELETE \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/$REPO/manifests/$DIGEST\n\necho \"Deleted image: $REPO@$DIGEST\"\n```\n\nThis example deletes the manifest for the `latest` tag. To fully delete all references to an image, ensure no other tags or referrers point to the same manifest digest.\n",
+      "x-displayName": "Deleting Images"
+    }
+  ]
+}
