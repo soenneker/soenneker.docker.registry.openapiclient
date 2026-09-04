@@ -2,7 +2,7 @@
   "descriptionHash": "64F330D757D9CA444F33631AC665ED7FA55913D7CBAD719EBCDDEDB28EB8EC6BCE4A52B5E4B830583F090FCD6F0E73829304008F0F0E3577CA13A5D6C26B7FFE",
   "descriptionLocation": "../../openapi.fixed.json",
   "lockFileVersion": "1.0.0",
-  "kiotaVersion": "1.34.1",
+  "kiotaVersion": "1.35.0",
   "clientClassName": "DockerRegistryOpenApiClient",
   "typeAccessModifier": "Public",
   "clientNamespaceName": "Soenneker.Docker.Registry.OpenApiClient",
