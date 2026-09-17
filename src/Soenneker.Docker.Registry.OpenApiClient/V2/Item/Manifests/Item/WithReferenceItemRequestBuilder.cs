@@ -51,7 +51,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Manifests.Item
             await RequestAdapter.SendNoContentAsync(requestInfo, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Fetch the manifest identified by `name` and `reference`, where `reference` can be a tag (e.g., `latest`) or a digest (e.g., `sha256:...`).The manifest contains metadata about the image, including configuration and layer digests. It is required for pulling images from the registry.This endpoint requires authentication. Use the `Authorization: Bearer &lt;token&gt;` header.
+        /// Fetch the manifest identified by `name` and `reference`, where `reference` can be a tag (e.g., `latest`) or a digest (e.g., `sha256:...`).The manifest contains metadata about the image, including configuration and layer digests. It is required for pulling images from the registry.This endpoint requires authentication. Use the `Authorization: Bearer &lt;token&gt;` header.Use the `Accept` header to select the manifest representation. Supported media types:- `application/vnd.docker.distribution.manifest.v2+json`- `application/vnd.docker.distribution.manifest.list.v2+json`- `application/vnd.oci.image.manifest.v1+json`- `application/vnd.oci.image.index.v1+json`
         /// </summary>
         /// <returns>A <see cref="global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -69,7 +69,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Manifests.Item
             return await RequestAdapter.SendAsync<global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponse>(requestInfo, global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Use this endpoint to verify whether a manifest exists by tag or digest.This is a lightweight operation that returns only headers (no body). It is useful for:- Checking for the existence of a specific image version- Determining the digest or size of a manifest before downloading or deletingThis endpoint requires authentication with pull scope.
+        /// Use this endpoint to verify whether a manifest exists by tag or digest.This is a lightweight operation that returns only headers (no body). It is useful for:- Checking for the existence of a specific image version- Determining the digest or size of a manifest before downloading or deletingThis endpoint requires authentication with pull scope.Use the `Accept` header to select the manifest representation. Supported media types:- `application/vnd.docker.distribution.manifest.v2+json`- `application/vnd.docker.distribution.manifest.list.v2+json`- `application/vnd.oci.image.manifest.v1+json`- `application/vnd.oci.image.index.v1+json`
         /// </summary>
         /// <returns>A <see cref="Stream"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -124,7 +124,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Manifests.Item
             return requestInfo;
         }
         /// <summary>
-        /// Fetch the manifest identified by `name` and `reference`, where `reference` can be a tag (e.g., `latest`) or a digest (e.g., `sha256:...`).The manifest contains metadata about the image, including configuration and layer digests. It is required for pulling images from the registry.This endpoint requires authentication. Use the `Authorization: Bearer &lt;token&gt;` header.
+        /// Fetch the manifest identified by `name` and `reference`, where `reference` can be a tag (e.g., `latest`) or a digest (e.g., `sha256:...`).The manifest contains metadata about the image, including configuration and layer digests. It is required for pulling images from the registry.This endpoint requires authentication. Use the `Authorization: Bearer &lt;token&gt;` header.Use the `Accept` header to select the manifest representation. Supported media types:- `application/vnd.docker.distribution.manifest.v2+json`- `application/vnd.docker.distribution.manifest.list.v2+json`- `application/vnd.oci.image.manifest.v1+json`- `application/vnd.oci.image.index.v1+json`
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -143,7 +143,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Manifests.Item
             return requestInfo;
         }
         /// <summary>
-        /// Use this endpoint to verify whether a manifest exists by tag or digest.This is a lightweight operation that returns only headers (no body). It is useful for:- Checking for the existence of a specific image version- Determining the digest or size of a manifest before downloading or deletingThis endpoint requires authentication with pull scope.
+        /// Use this endpoint to verify whether a manifest exists by tag or digest.This is a lightweight operation that returns only headers (no body). It is useful for:- Checking for the existence of a specific image version- Determining the digest or size of a manifest before downloading or deletingThis endpoint requires authentication with pull scope.Use the `Accept` header to select the manifest representation. Supported media types:- `application/vnd.docker.distribution.manifest.v2+json`- `application/vnd.docker.distribution.manifest.list.v2+json`- `application/vnd.oci.image.manifest.v1+json`- `application/vnd.oci.image.index.v1+json`
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

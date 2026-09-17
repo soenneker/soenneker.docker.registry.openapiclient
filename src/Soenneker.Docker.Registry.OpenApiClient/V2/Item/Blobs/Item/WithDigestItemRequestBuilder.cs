@@ -52,20 +52,20 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Item
         /// <summary>
         /// Check whether a blob (layer or config) exists in the registry.This is useful before uploading a blob to avoid duplicates.If the blob is present, the registry returns a `200 OK` response with headers like `Content-Length` and `Docker-Content-Digest`.If the blob does not exist, the response will be `404 Not Found`.
         /// </summary>
-        /// <returns>A <see cref="global::Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Item.WithDigestHeadResponse"/></returns>
+        /// <returns>A <see cref="Stream"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Item.WithDigestHeadResponse?> HeadAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<Stream?> HeadAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Item.WithDigestHeadResponse> HeadAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<Stream> HeadAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToHeadRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<global::Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Item.WithDigestHeadResponse>(requestInfo, global::Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Item.WithDigestHeadResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendPrimitiveAsync<Stream>(requestInfo, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Download the blob identified by digest from the registry.Blobs include image layers and configuration objects. Clients must use the digest from the manifest to retrieve a blob.This endpoint may return a `307 Temporary Redirect` to a CDN or storage location. Clients must follow the redirect to obtain the actual blob content.The blob content is typically a gzipped tarball (for layers) or JSON (for configs). The MIME type is usually `application/octet-stream`.
@@ -102,7 +102,6 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Item
 #endif
             var requestInfo = new RequestInformation(Method.HEAD, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
-            requestInfo.Headers.TryAdd("Accept", "application/json");
             return requestInfo;
         }
         /// <summary>
