@@ -9,7 +9,8 @@
   "servers": [
     {
       "url": "https://registry-1.docker.io",
-      "description": "Docker Hub registry API"
+      "description": "Docker Hub registry API",
+      "x-audience": "public"
     }
   ],
   "paths": {
@@ -118,7 +119,15 @@
           "429": {
             "description": "Too many requests."
           }
-        }
+        },
+        "x-displayName": "Manifests",
+        "x-codeSamples": [
+          {
+            "lang": "Bash",
+            "label": "cURL",
+            "source": "# GET a manifest (by tag or digest)\ncurl -H \"Authorization: Bearer $TOKEN\" \\\n     -H \"Accept: application/vnd.docker.distribution.manifest.v2+json\" \\\n     https://registry-1.docker.io/v2/library/ubuntu/manifests/latest\n"
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -234,7 +243,14 @@
           "429": {
             "description": "Too many requests."
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Bash",
+            "label": "cURL",
+            "source": "# PUT a manifest (tag = latest)\ncurl -X PUT \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/vnd.docker.distribution.manifest.v2+json\" \\\n  --data-binary @manifest.json \\\n  https://registry-1.docker.io/v2/library/ubuntu/manifests/latest\n"
+          }
+        ]
       },
       "head": {
         "tags": [
@@ -313,7 +329,14 @@
           "429": {
             "description": "Too many requests."
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Bash",
+            "label": "cURL",
+            "source": "# HEAD /v2/{name}/manifests/{reference}\ncurl -I \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Accept: application/vnd.docker.distribution.manifest.v2+json\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/manifests/latest\n"
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -363,7 +386,14 @@
           "429": {
             "description": "Too many requests."
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Bash",
+            "label": "cURL",
+            "source": "# DELETE a manifest by digest\ncurl -X DELETE \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/yourusername/helloworld/manifests/sha256:abc123def456...\n"
+          }
+        ]
       }
     },
     "/v2/{name}/blobs/uploads": {
@@ -476,7 +506,19 @@
           "429": {
             "description": "Too many requests."
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Bash",
+            "label": "cURL (Initiate Standard Upload)",
+            "source": "# Initiate a standard blob upload session\ncurl -i -X POST \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/\n"
+          },
+          {
+            "lang": "Bash",
+            "label": "cURL (Cross-Repository Blob Mount)",
+            "source": "# Attempt a cross-repository blob mount\ncurl -i -X POST \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  \"https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/?mount=sha256:abc123def456...&from=library/busybox\"\n"
+          }
+        ]
       }
     },
     "/v2/{name}/blobs/{digest}": {
@@ -548,7 +590,14 @@
           "429": {
             "description": "Too many requests"
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Bash",
+            "label": "cURL",
+            "source": "# HEAD to check if a blob exists\ncurl -I \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/sha256:abc123...\n"
+          }
+        ]
       },
       "get": {
         "tags": [
@@ -643,7 +692,14 @@
           "429": {
             "description": "Too many requests"
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Bash",
+            "label": "cURL",
+            "source": "# GET (download) a blob\ncurl -L \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/sha256:abc123... \\\n  -o layer.tar.gz\n"
+          }
+        ]
       }
     },
     "/v2/{name}/blobs/uploads/{uuid}": {
@@ -715,7 +771,14 @@
           "429": {
             "description": "Too many requests"
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Bash",
+            "label": "cURL",
+            "source": "# GET upload status\ncurl --include --request GET \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123\n"
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -816,7 +879,14 @@
           "429": {
             "description": "Too many requests"
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Bash",
+            "label": "cURL",
+            "source": "# PUT – complete upload (monolithic or final chunk)\ncurl -X PUT \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/octet-stream\" \\\n  --data-binary @layer.tar.gz \\\n  \"https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123?digest=sha256:abcd1234...\"\n"
+          }
+        ]
       },
       "patch": {
         "tags": [
@@ -917,7 +987,14 @@
           "429": {
             "description": "Too many requests"
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Bash",
+            "label": "cURL",
+            "source": "# PATCH – upload a chunk (first 64 KiB)\ncurl -X PATCH \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/octet-stream\" \\\n  --data-binary @chunk-0.bin \\\n  \"https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123\"\n"
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -973,7 +1050,14 @@
           "429": {
             "description": "Too many requests"
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Bash",
+            "label": "cURL",
+            "source": "# DELETE – cancel an upload session\ncurl -X DELETE \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123`\n"
+          }
+        ]
       }
     }
   },
@@ -1205,6 +1289,25 @@
       "description": "Deleting an image involves removing its manifest by digest. You must first retrieve the manifest digest, then issue a `DELETE` request using that digest.\n\nOnly untagged manifests (or those not referenced by other tags or images) can be deleted. If a manifest is still referenced, the registry returns `403 Forbidden`.\n\n> **Note**\n>\n> Manifest deletion operations may experience latency and could return a `500 Internal Server Error` during deletion. The system automatically retries the deletion in the background, so the manifest will eventually be removed. You do not need to manually retry the request.\n\nThis section outlines the basic steps to delete an image using the registry API.\n\n1. [Get a bearer token for the repository](https://docs.docker.com/reference/api/registry/auth/).\n2. [Get the manifest](#operation/GetImageManifest) using the image's tag.\n3. Retrieve the `Docker-Content-Digest` header from the manifest response. This digest uniquely identifies the manifest.\n4. [Delete the manifest](#operation/DeleteImageManifest) using a `DELETE` request and the digest.\n\nThe following bash script example deletes the `latest` tag from `yourusername/helloworld` on Docker Hub. Replace `yourusername` with your Docker Hub username and `dckr_pat` with your Docker Hub personal access token.\n\n```bash\n#!/bin/bash\n\nUSERNAME=yourusername\nPASSWORD=dckr_pat\nREPO=yourusername/helloworld\nTAG=latest\n\n# Step 1: Get a bearer token\nTOKEN=$(curl -s -u \"$USERNAME:$PASSWORD\" \\\n  \"https://auth.docker.io/token?service=registry.docker.io&scope=repository:$REPO:pull,push,delete\" \\\n  | jq -r .token)\n\n# Step 2 and 3: Get the manifest and extract the digest from response headers\nDIGEST=$(curl -sI -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Accept: application/vnd.docker.distribution.manifest.v2+json\" \\\n  https://registry-1.docker.io/v2/$REPO/manifests/$TAG \\\n  | grep -i Docker-Content-Digest | tr -d '\\r' | awk '{print $2}')\n\necho \"Deleting manifest with digest: $DIGEST\"\n\n# Step 4: Delete the manifest by digest\ncurl -s -X DELETE \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/$REPO/manifests/$DIGEST\n\necho \"Deleted image: $REPO@$DIGEST\"\n```\n\nThis example deletes the manifest for the `latest` tag. To fully delete all references to an image, ensure no other tags or referrers point to the same manifest digest.\n",
       "summary": "Deleting Images",
       "kind": "info"
+    }
+  ],
+  "x-tagGroups": [
+    {
+      "name": "General",
+      "tags": [
+        "overview",
+        "authentication",
+        "pull",
+        "push",
+        "delete"
+      ]
+    },
+    {
+      "name": "API",
+      "tags": [
+        "Manifests",
+        "Blobs"
+      ]
     }
   ]
 }
