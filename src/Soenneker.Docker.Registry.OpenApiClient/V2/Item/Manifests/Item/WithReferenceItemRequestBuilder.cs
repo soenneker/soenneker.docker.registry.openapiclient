@@ -71,20 +71,19 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Manifests.Item
         /// <summary>
         /// Use this endpoint to verify whether a manifest exists by tag or digest.This is a lightweight operation that returns only headers (no body). It is useful for:- Checking for the existence of a specific image version- Determining the digest or size of a manifest before downloading or deletingThis endpoint requires authentication with pull scope.Use the `Accept` header to select the manifest representation. Supported media types:- `application/vnd.docker.distribution.manifest.v2+json`- `application/vnd.docker.distribution.manifest.list.v2+json`- `application/vnd.oci.image.manifest.v1+json`- `application/vnd.oci.image.index.v1+json`
         /// </summary>
-        /// <returns>A <see cref="Stream"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<Stream?> HeadAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task HeadAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<Stream> HeadAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task HeadAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToHeadRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendPrimitiveAsync<Stream>(requestInfo, default, cancellationToken).ConfigureAwait(false);
+            await RequestAdapter.SendNoContentAsync(requestInfo, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Upload an image manifest for a given tag or digest. This operation registers a manifest in a repository, allowing it to be pulled using the specified reference.This endpoint is typically used after all layer and config blobs have been uploaded to the registry.The manifest must conform to the expected schema and media type. For Docker image manifest schema version 2, use:`application/vnd.docker.distribution.manifest.v2+json`Requires authentication via a bearer token with `push` scope for the target repository.
