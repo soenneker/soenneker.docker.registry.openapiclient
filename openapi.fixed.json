@@ -396,7 +396,7 @@
         ]
       }
     },
-    "/v2/{name}/blobs/uploads": {
+    "/v2/{name}/blobs/uploads/": {
       "post": {
         "tags": [
           "Blobs"
@@ -1128,28 +1128,12 @@
         "format": "binary"
       },
       "CompleteBlobUploadOctetStreamRequest": {
-        "required": [
-          "value"
-        ],
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "string",
-            "format": "binary"
-          }
-        }
+        "type": "string",
+        "format": "binary"
       },
       "UploadBlobChunkOctetStreamRequest": {
-        "required": [
-          "value"
-        ],
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "string",
-            "format": "binary"
-          }
-        }
+        "type": "string",
+        "format": "binary"
       },
       "GetImageManifest200DockerDistributionManifestV2JsonResponseConfig": {
         "type": "object",
