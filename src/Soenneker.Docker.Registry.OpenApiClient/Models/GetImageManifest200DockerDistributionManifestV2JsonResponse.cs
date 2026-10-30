@@ -11,35 +11,53 @@ namespace Soenneker.Docker.Registry.OpenApiClient.Models
     #pragma warning disable CS1591
     public partial class GetImageManifest200DockerDistributionManifestV2JsonResponse : IAdditionalDataHolder, IParsable
     #pragma warning restore CS1591
-    {
+    , global::Soenneker.OpenApi.Generated.IOpenApiExplicitNulls {
+        // Track explicitly assigned nulls separately from absent properties.
+        private global::System.Collections.Generic.HashSet<string> _explicitNullProperties = null!;
+
+        public virtual void CaptureExplicitNulls(global::Microsoft.Kiota.Abstractions.Serialization.IParseNode parseNode)
+        {
+            if (parseNode.GetChildNode("config") is { } nullNodeConfig && nullNodeConfig.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) Config = null;
+            if (parseNode.GetChildNode("layers") is { } nullNodeLayers && nullNodeLayers.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) Layers = null;
+            if (parseNode.GetChildNode("mediaType") is { } nullNodeMediaType && nullNodeMediaType.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) MediaType = null;
+            if (parseNode.GetChildNode("schemaVersion") is { } nullNodeSchemaVersion && nullNodeSchemaVersion.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) SchemaVersion = null;
+        }
+
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
         /// <summary>The config property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseConfig? Config { get; set; }
+        public global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseConfig? Config { get => _explicitNullValueConfig; set { _explicitNullValueConfig = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("config"); else _explicitNullProperties?.Remove("config"); } }
+        private global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseConfig? _explicitNullValueConfig = default!;
 #nullable restore
 #else
-        public global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseConfig Config { get; set; }
+        public global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseConfig Config { get => _explicitNullValueConfig; set { _explicitNullValueConfig = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("config"); else _explicitNullProperties?.Remove("config"); } }
+        private global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseConfig _explicitNullValueConfig = default!;
 #endif
         /// <summary>The layers property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseLayersItem>? Layers { get; set; }
+        public List<global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseLayersItem>? Layers { get => _explicitNullValueLayers; set { _explicitNullValueLayers = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("layers"); else _explicitNullProperties?.Remove("layers"); } }
+        private List<global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseLayersItem>? _explicitNullValueLayers = default!;
 #nullable restore
 #else
-        public List<global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseLayersItem> Layers { get; set; }
+        public List<global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseLayersItem> Layers { get => _explicitNullValueLayers; set { _explicitNullValueLayers = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("layers"); else _explicitNullProperties?.Remove("layers"); } }
+        private List<global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseLayersItem> _explicitNullValueLayers = default!;
 #endif
         /// <summary>The mediaType property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public string? MediaType { get; set; }
+        public string? MediaType { get => _explicitNullValueMediaType; set { _explicitNullValueMediaType = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("mediaType"); else _explicitNullProperties?.Remove("mediaType"); } }
+        private string? _explicitNullValueMediaType = default!;
 #nullable restore
 #else
-        public string MediaType { get; set; }
+        public string MediaType { get => _explicitNullValueMediaType; set { _explicitNullValueMediaType = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("mediaType"); else _explicitNullProperties?.Remove("mediaType"); } }
+        private string _explicitNullValueMediaType = default!;
 #endif
         /// <summary>The schemaVersion property</summary>
-        public int? SchemaVersion { get; set; }
+        public int? SchemaVersion { get => _explicitNullValueSchemaVersion; set { _explicitNullValueSchemaVersion = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("schemaVersion"); else _explicitNullProperties?.Remove("schemaVersion"); } }
+        private int? _explicitNullValueSchemaVersion = default!;
         /// <summary>
         /// Instantiates a new <see cref="global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponse"/> and sets the default values.
         /// </summary>
@@ -55,7 +73,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.Models
         public static global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponse CreateFromDiscriminatorValue(IParseNode parseNode)
         {
             if(ReferenceEquals(parseNode, null)) throw new ArgumentNullException(nameof(parseNode));
-            return new global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponse();
+            return global::Soenneker.OpenApi.Generated.OpenApiNullTracking.Capture(new global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponse(), parseNode);
         }
         /// <summary>
         /// The deserialization information for the current model
@@ -82,6 +100,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.Models
             writer.WriteCollectionOfObjectValues<global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponseLayersItem>("layers", Layers);
             writer.WriteStringValue("mediaType", MediaType);
             writer.WriteIntValue("schemaVersion", SchemaVersion);
+            if (_explicitNullProperties != null) foreach (string name in _explicitNullProperties) writer.WriteNullValue(name);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

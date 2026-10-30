@@ -47,7 +47,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Uploads.Item
         {
 #endif
             var requestInfo = ToDeleteRequestInformation(requestConfiguration);
-            await RequestAdapter.SendNoContentAsync(requestInfo, default, cancellationToken).ConfigureAwait(false);
+            await RequestAdapter.SendNoContentAsync(requestInfo, new global::System.Collections.Generic.Dictionary<string, global::Microsoft.Kiota.Abstractions.Serialization.ParsableFactory<global::Microsoft.Kiota.Abstractions.Serialization.IParsable>> { { "4XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue }, { "5XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue } }, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Retrieve the current status of an in-progress blob upload.This is useful for:- Resuming an interrupted upload- Determining how many bytes have been accepted so far- Retrying from the correct offset in chunked uploadsThe response includes the `Range` header indicating the byte range received so far, and a `Docker-Upload-UUID` for identifying the session.
@@ -64,7 +64,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Uploads.Item
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            await RequestAdapter.SendNoContentAsync(requestInfo, default, cancellationToken).ConfigureAwait(false);
+            await RequestAdapter.SendNoContentAsync(requestInfo, new global::System.Collections.Generic.Dictionary<string, global::Microsoft.Kiota.Abstractions.Serialization.ParsableFactory<global::Microsoft.Kiota.Abstractions.Serialization.IParsable>> { { "4XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue }, { "5XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue } }, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Upload a chunk of a blob to an active upload session.Use this method for **chunked uploads**, especially for large blobs or when resuming interrupted uploads.The client sends binary data using `PATCH`, optionally including a `Content-Range` header.After each chunk is accepted, the registry returns a `202 Accepted` response with:- `Range`: current byte range stored- `Docker-Upload-UUID`: identifier for the upload session- `Location`: URL to continue the upload or finalize with `PUT`
@@ -83,7 +83,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Uploads.Item
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = ToPatchRequestInformation(body, requestConfiguration);
-            await RequestAdapter.SendNoContentAsync(requestInfo, default, cancellationToken).ConfigureAwait(false);
+            await RequestAdapter.SendNoContentAsync(requestInfo, new global::System.Collections.Generic.Dictionary<string, global::Microsoft.Kiota.Abstractions.Serialization.ParsableFactory<global::Microsoft.Kiota.Abstractions.Serialization.IParsable>> { { "4XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue }, { "5XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue } }, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Complete the upload of a blob by finalizing an upload session.This request must include the `digest` query parameter and optionally the last chunk of data. When the registry receives this request, it verifies the digest and stores the blob.This endpoint supports:- Monolithic uploads (upload entire blob in this request)- Finalizing chunked uploads (last chunk plus `digest`)
@@ -102,7 +102,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Uploads.Item
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = ToPutRequestInformation(body, requestConfiguration);
-            await RequestAdapter.SendNoContentAsync(requestInfo, default, cancellationToken).ConfigureAwait(false);
+            await RequestAdapter.SendNoContentAsync(requestInfo, new global::System.Collections.Generic.Dictionary<string, global::Microsoft.Kiota.Abstractions.Serialization.ParsableFactory<global::Microsoft.Kiota.Abstractions.Serialization.IParsable>> { { "4XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue }, { "5XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue } }, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Cancel an in-progress blob upload session.This operation discards any data that has been uploaded and invalidates the upload session.Use this when:- An upload fails or is aborted mid-process- The client wants to clean up unused upload sessionsAfter cancellation, the UUID is no longer valid and a new `POST` must be issued to restart the upload.

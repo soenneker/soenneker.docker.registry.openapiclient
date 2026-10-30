@@ -48,7 +48,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Manifests.Item
         {
 #endif
             var requestInfo = ToDeleteRequestInformation(requestConfiguration);
-            await RequestAdapter.SendNoContentAsync(requestInfo, default, cancellationToken).ConfigureAwait(false);
+            await RequestAdapter.SendNoContentAsync(requestInfo, new global::System.Collections.Generic.Dictionary<string, global::Microsoft.Kiota.Abstractions.Serialization.ParsableFactory<global::Microsoft.Kiota.Abstractions.Serialization.IParsable>> { { "4XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue }, { "5XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue } }, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Fetch the manifest identified by `name` and `reference`, where `reference` can be a tag (e.g., `latest`) or a digest (e.g., `sha256:...`).The manifest contains metadata about the image, including configuration and layer digests. It is required for pulling images from the registry.This endpoint requires authentication. Use the `Authorization: Bearer &lt;token&gt;` header.Use the `Accept` header to select the manifest representation. Supported media types:- `application/vnd.docker.distribution.manifest.v2+json`- `application/vnd.docker.distribution.manifest.list.v2+json`- `application/vnd.oci.image.manifest.v1+json`- `application/vnd.oci.image.index.v1+json`
@@ -66,7 +66,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Manifests.Item
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponse>(requestInfo, global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponse.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponse>(requestInfo, global::Soenneker.Docker.Registry.OpenApiClient.Models.GetImageManifest200DockerDistributionManifestV2JsonResponse.CreateFromDiscriminatorValue, new global::System.Collections.Generic.Dictionary<string, global::Microsoft.Kiota.Abstractions.Serialization.ParsableFactory<global::Microsoft.Kiota.Abstractions.Serialization.IParsable>> { { "4XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue }, { "5XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue } }, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Use this endpoint to verify whether a manifest exists by tag or digest.This is a lightweight operation that returns only headers (no body). It is useful for:- Checking for the existence of a specific image version- Determining the digest or size of a manifest before downloading or deletingThis endpoint requires authentication with pull scope.Use the `Accept` header to select the manifest representation. Supported media types:- `application/vnd.docker.distribution.manifest.v2+json`- `application/vnd.docker.distribution.manifest.list.v2+json`- `application/vnd.oci.image.manifest.v1+json`- `application/vnd.oci.image.index.v1+json`
@@ -83,7 +83,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Manifests.Item
         {
 #endif
             var requestInfo = ToHeadRequestInformation(requestConfiguration);
-            await RequestAdapter.SendNoContentAsync(requestInfo, default, cancellationToken).ConfigureAwait(false);
+            await RequestAdapter.SendNoContentAsync(requestInfo, new global::System.Collections.Generic.Dictionary<string, global::Microsoft.Kiota.Abstractions.Serialization.ParsableFactory<global::Microsoft.Kiota.Abstractions.Serialization.IParsable>> { { "4XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue }, { "5XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue } }, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Upload an image manifest for a given tag or digest. This operation registers a manifest in a repository, allowing it to be pulled using the specified reference.This endpoint is typically used after all layer and config blobs have been uploaded to the registry.The manifest must conform to the expected schema and media type. For Docker image manifest schema version 2, use:`application/vnd.docker.distribution.manifest.v2+json`Requires authentication via a bearer token with `push` scope for the target repository.
@@ -102,7 +102,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Manifests.Item
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = ToPutRequestInformation(body, requestConfiguration);
-            await RequestAdapter.SendNoContentAsync(requestInfo, default, cancellationToken).ConfigureAwait(false);
+            await RequestAdapter.SendNoContentAsync(requestInfo, new global::System.Collections.Generic.Dictionary<string, global::Microsoft.Kiota.Abstractions.Serialization.ParsableFactory<global::Microsoft.Kiota.Abstractions.Serialization.IParsable>> { { "4XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue }, { "5XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue } }, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Delete an image manifest from a repository by digest.Only untagged or unreferenced manifests can be deleted. If the manifest is still referenced by a tag or another image, the registry will return `403 Forbidden`.This operation requires `delete` access to the repository.&gt; **Note**&gt;&gt; Manifest deletion operations may take some time and could return a `500 Internal Server Error`. The system automatically retries the deletion in the background. Manual intervention is not required.
