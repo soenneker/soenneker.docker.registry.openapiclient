@@ -63,7 +63,7 @@ namespace Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Uploads
         public RequestInformation ToPostRequestInformation(Action<RequestConfiguration<global::Soenneker.Docker.Registry.OpenApiClient.V2.Item.Blobs.Uploads.EmptyPathSegmentRequestBuilder.EmptyPathSegmentRequestBuilderPostQueryParameters>> requestConfiguration = default)
         {
 #endif
-            var requestInfo = new RequestInformation(Method.POST, UrlTemplate, PathParameters);
+            var requestInfo = new RequestInformation(Method.POST, global::Soenneker.OpenApi.Generated.OpenApiServiceRoutes.Resolve(UrlTemplate, RequestAdapter.BaseUrl, "https://registry-1.docker.io", "/v2/{name}/blobs/uploads/", PathParameters.ContainsKey("request-raw-url")), PathParameters);
             requestInfo.Configure(requestConfiguration);
             return requestInfo;
         }
