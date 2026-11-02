@@ -20,7 +20,7 @@
           "Manifests"
         ],
         "summary": "Get image manifest",
-        "description": "Fetch the manifest identified by `name` and `reference`, where `reference` can be a tag (e.g., `latest`) or a digest (e.g., `sha256:...`).\n\nThe manifest contains metadata about the image, including configuration and layer digests. It is required for pulling images from the registry.\n\nThis endpoint requires authentication. Use the `Authorization: Bearer <token>` header.\n\nUse the `Accept` header to select the manifest representation. Supported media types:\n\n- `application/vnd.docker.distribution.manifest.v2+json`\n- `application/vnd.docker.distribution.manifest.list.v2+json`\n- `application/vnd.oci.image.manifest.v1+json`\n- `application/vnd.oci.image.index.v1+json`\n",
+        "description": "Fetch the manifest identified by \u0060name\u0060 and \u0060reference\u0060, where \u0060reference\u0060 can be a tag (e.g., \u0060latest\u0060) or a digest (e.g., \u0060sha256:...\u0060).\n\nThe manifest contains metadata about the image, including configuration and layer digests. It is required for pulling images from the registry.\n\nThis endpoint requires authentication. Use the \u0060Authorization: Bearer \u003Ctoken\u003E\u0060 header.\n\nUse the \u0060Accept\u0060 header to select the manifest representation. Supported media types:\n\n- \u0060application/vnd.docker.distribution.manifest.v2\u002Bjson\u0060\n- \u0060application/vnd.docker.distribution.manifest.list.v2\u002Bjson\u0060\n- \u0060application/vnd.oci.image.manifest.v1\u002Bjson\u0060\n- \u0060application/vnd.oci.image.index.v1\u002Bjson\u0060\n",
         "operationId": "GetImageManifest",
         "parameters": [
           {
@@ -71,7 +71,7 @@
               }
             },
             "content": {
-              "application/vnd.docker.distribution.manifest.v2+json": {
+              "application/vnd.docker.distribution.manifest.v2\u002Bjson": {
                 "schema": {
                   "$ref": "#/components/schemas/GetImageManifest200DockerDistributionManifestV2JsonResponse"
                 },
@@ -80,9 +80,9 @@
                     "summary": "Docker image manifest (schema v2)",
                     "value": {
                       "schemaVersion": 2,
-                      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+                      "mediaType": "application/vnd.docker.distribution.manifest.v2\u002Bjson",
                       "config": {
-                        "mediaType": "application/vnd.docker.container.image.v1+json",
+                        "mediaType": "application/vnd.docker.container.image.v1\u002Bjson",
                         "size": 7023,
                         "digest": "sha256:123456abcdef..."
                       },
@@ -125,7 +125,7 @@
           {
             "lang": "Bash",
             "label": "cURL",
-            "source": "# GET a manifest (by tag or digest)\ncurl -H \"Authorization: Bearer $TOKEN\" \\\n     -H \"Accept: application/vnd.docker.distribution.manifest.v2+json\" \\\n     https://registry-1.docker.io/v2/library/ubuntu/manifests/latest\n"
+            "source": "# GET a manifest (by tag or digest)\ncurl -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n     -H \u0022Accept: application/vnd.docker.distribution.manifest.v2\u002Bjson\u0022 \\\n     https://registry-1.docker.io/v2/library/ubuntu/manifests/latest\n"
           }
         ]
       },
@@ -134,7 +134,7 @@
           "Manifests"
         ],
         "summary": "Put image manifest",
-        "description": "Upload an image manifest for a given tag or digest. This operation registers a manifest in a repository, allowing it to be pulled using the specified reference.\n\nThis endpoint is typically used after all layer and config blobs have been uploaded to the registry.\n\nThe manifest must conform to the expected schema and media type. For Docker image manifest schema version 2, use:\n`application/vnd.docker.distribution.manifest.v2+json`\n\nRequires authentication via a bearer token with `push` scope for the target repository.\n",
+        "description": "Upload an image manifest for a given tag or digest. This operation registers a manifest in a repository, allowing it to be pulled using the specified reference.\n\nThis endpoint is typically used after all layer and config blobs have been uploaded to the registry.\n\nThe manifest must conform to the expected schema and media type. For Docker image manifest schema version 2, use:\n\u0060application/vnd.docker.distribution.manifest.v2\u002Bjson\u0060\n\nRequires authentication via a bearer token with \u0060push\u0060 scope for the target repository.\n",
         "operationId": "PutImageManifest",
         "parameters": [
           {
@@ -169,7 +169,7 @@
         ],
         "requestBody": {
           "content": {
-            "application/vnd.docker.distribution.manifest.v2+json": {
+            "application/vnd.docker.distribution.manifest.v2\u002Bjson": {
               "schema": {
                 "$ref": "#/components/schemas/PutImageManifestDockerDistributionManifestV2JsonRequest"
               },
@@ -178,9 +178,9 @@
                   "summary": "Sample Docker image manifest (schema v2)",
                   "value": {
                     "schemaVersion": 2,
-                    "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+                    "mediaType": "application/vnd.docker.distribution.manifest.v2\u002Bjson",
                     "config": {
-                      "mediaType": "application/vnd.docker.container.image.v1+json",
+                      "mediaType": "application/vnd.docker.container.image.v1\u002Bjson",
                       "size": 7023,
                       "digest": "sha256:123456abcdef..."
                     },
@@ -248,7 +248,7 @@
           {
             "lang": "Bash",
             "label": "cURL",
-            "source": "# PUT a manifest (tag = latest)\ncurl -X PUT \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/vnd.docker.distribution.manifest.v2+json\" \\\n  --data-binary @manifest.json \\\n  https://registry-1.docker.io/v2/library/ubuntu/manifests/latest\n"
+            "source": "# PUT a manifest (tag = latest)\ncurl -X PUT \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  -H \u0022Content-Type: application/vnd.docker.distribution.manifest.v2\u002Bjson\u0022 \\\n  --data-binary @manifest.json \\\n  https://registry-1.docker.io/v2/library/ubuntu/manifests/latest\n"
           }
         ]
       },
@@ -257,7 +257,7 @@
           "Manifests"
         ],
         "summary": "Check if manifest exists",
-        "description": "Use this endpoint to verify whether a manifest exists by tag or digest.\n\nThis is a lightweight operation that returns only headers (no body). It is useful for:\n- Checking for the existence of a specific image version\n- Determining the digest or size of a manifest before downloading or deleting\n\nThis endpoint requires authentication with pull scope.\n\nUse the `Accept` header to select the manifest representation. Supported media types:\n\n- `application/vnd.docker.distribution.manifest.v2+json`\n- `application/vnd.docker.distribution.manifest.list.v2+json`\n- `application/vnd.oci.image.manifest.v1+json`\n- `application/vnd.oci.image.index.v1+json`\n",
+        "description": "Use this endpoint to verify whether a manifest exists by tag or digest.\n\nThis is a lightweight operation that returns only headers (no body). It is useful for:\n- Checking for the existence of a specific image version\n- Determining the digest or size of a manifest before downloading or deleting\n\nThis endpoint requires authentication with pull scope.\n\nUse the \u0060Accept\u0060 header to select the manifest representation. Supported media types:\n\n- \u0060application/vnd.docker.distribution.manifest.v2\u002Bjson\u0060\n- \u0060application/vnd.docker.distribution.manifest.list.v2\u002Bjson\u0060\n- \u0060application/vnd.oci.image.manifest.v1\u002Bjson\u0060\n- \u0060application/vnd.oci.image.index.v1\u002Bjson\u0060\n",
         "operationId": "HeadImageManifest",
         "parameters": [
           {
@@ -313,7 +313,7 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "application/vnd.docker.distribution.manifest.v2+json"
+                "example": "application/vnd.docker.distribution.manifest.v2\u002Bjson"
               }
             }
           },
@@ -334,7 +334,7 @@
           {
             "lang": "Bash",
             "label": "cURL",
-            "source": "# HEAD /v2/{name}/manifests/{reference}\ncurl -I \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Accept: application/vnd.docker.distribution.manifest.v2+json\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/manifests/latest\n"
+            "source": "# HEAD /v2/{name}/manifests/{reference}\ncurl -I \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  -H \u0022Accept: application/vnd.docker.distribution.manifest.v2\u002Bjson\u0022 \\\n  https://registry-1.docker.io/v2/library/ubuntu/manifests/latest\n"
           }
         ]
       },
@@ -343,7 +343,7 @@
           "Manifests"
         ],
         "summary": "Delete image manifest",
-        "description": "Delete an image manifest from a repository by digest.\n\nOnly untagged or unreferenced manifests can be deleted. If the manifest is still referenced by a tag or another image, the registry will return `403 Forbidden`.\n\nThis operation requires `delete` access to the repository.\n\n> **Note**\n>\n> Manifest deletion operations may take some time and could return a `500 Internal Server Error`. The system automatically retries the deletion in the background. Manual intervention is not required.\n",
+        "description": "Delete an image manifest from a repository by digest.\n\nOnly untagged or unreferenced manifests can be deleted. If the manifest is still referenced by a tag or another image, the registry will return \u0060403 Forbidden\u0060.\n\nThis operation requires \u0060delete\u0060 access to the repository.\n\n\u003E **Note**\n\u003E\n\u003E Manifest deletion operations may take some time and could return a \u0060500 Internal Server Error\u0060. The system automatically retries the deletion in the background. Manual intervention is not required.\n",
         "operationId": "DeleteImageManifest",
         "parameters": [
           {
@@ -359,7 +359,7 @@
           {
             "name": "reference",
             "in": "path",
-            "description": "Digest of the manifest to delete (e.g., `sha256:...`)",
+            "description": "Digest of the manifest to delete (e.g., \u0060sha256:...\u0060)",
             "required": true,
             "schema": {
               "type": "string"
@@ -391,7 +391,7 @@
           {
             "lang": "Bash",
             "label": "cURL",
-            "source": "# DELETE a manifest by digest\ncurl -X DELETE \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/yourusername/helloworld/manifests/sha256:abc123def456...\n"
+            "source": "# DELETE a manifest by digest\ncurl -X DELETE \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  https://registry-1.docker.io/v2/yourusername/helloworld/manifests/sha256:abc123def456...\n"
           }
         ]
       }
@@ -402,7 +402,7 @@
           "Blobs"
         ],
         "summary": "Initiate blob upload or attempt cross-repository blob mount",
-        "description": "Initiate an upload session for a blob (layer or config) in a repository.\n\nThis is the first step in uploading a blob. It returns a `Location` URL where the blob can be uploaded using `PATCH` (chunked) or `PUT` (monolithic).\n\nInstead of uploading a blob, a client may attempt to mount a blob from another repository (if it has read access) by including the `mount` and `from` query parameters.\n\nIf successful, the registry responds with `201 Created` and the blob is reused without re-upload.\n\nIf the mount fails, the upload proceeds as usual and returns a `202 Accepted`.\n\nYou must authenticate with `push` access to the target repository.\n",
+        "description": "Initiate an upload session for a blob (layer or config) in a repository.\n\nThis is the first step in uploading a blob. It returns a \u0060Location\u0060 URL where the blob can be uploaded using \u0060PATCH\u0060 (chunked) or \u0060PUT\u0060 (monolithic).\n\nInstead of uploading a blob, a client may attempt to mount a blob from another repository (if it has read access) by including the \u0060mount\u0060 and \u0060from\u0060 query parameters.\n\nIf successful, the registry responds with \u0060201 Created\u0060 and the blob is reused without re-upload.\n\nIf the mount fails, the upload proceeds as usual and returns a \u0060202 Accepted\u0060.\n\nYou must authenticate with \u0060push\u0060 access to the target repository.\n",
         "operationId": "InitiateBlobUpload",
         "parameters": [
           {
@@ -465,7 +465,7 @@
             "description": "Upload initiated successfully (fallback if mount fails).",
             "headers": {
               "Location": {
-                "description": "Upload location URL for `PATCH` or `PUT` requests",
+                "description": "Upload location URL for \u0060PATCH\u0060 or \u0060PUT\u0060 requests",
                 "schema": {
                   "type": "string"
                 },
@@ -479,7 +479,7 @@
                 "example": "abc123"
               },
               "Range": {
-                "description": "Current upload byte range (typically `0-0` at init)",
+                "description": "Current upload byte range (typically \u00600-0\u0060 at init)",
                 "schema": {
                   "type": "string"
                 },
@@ -511,12 +511,12 @@
           {
             "lang": "Bash",
             "label": "cURL (Initiate Standard Upload)",
-            "source": "# Initiate a standard blob upload session\ncurl -i -X POST \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/\n"
+            "source": "# Initiate a standard blob upload session\ncurl -i -X POST \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/\n"
           },
           {
             "lang": "Bash",
             "label": "cURL (Cross-Repository Blob Mount)",
-            "source": "# Attempt a cross-repository blob mount\ncurl -i -X POST \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  \"https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/?mount=sha256:abc123def456...&from=library/busybox\"\n"
+            "source": "# Attempt a cross-repository blob mount\ncurl -i -X POST \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  \u0022https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/?mount=sha256:abc123def456...\u0026from=library/busybox\u0022\n"
           }
         ]
       }
@@ -527,7 +527,7 @@
           "Blobs"
         ],
         "summary": "Check existence of blob",
-        "description": "Check whether a blob (layer or config) exists in the registry.\n\nThis is useful before uploading a blob to avoid duplicates.\n\nIf the blob is present, the registry returns a `200 OK` response with headers like `Content-Length` and `Docker-Content-Digest`.\n\nIf the blob does not exist, the response will be `404 Not Found`.\n",
+        "description": "Check whether a blob (layer or config) exists in the registry.\n\nThis is useful before uploading a blob to avoid duplicates.\n\nIf the blob is present, the registry returns a \u0060200 OK\u0060 response with headers like \u0060Content-Length\u0060 and \u0060Docker-Content-Digest\u0060.\n\nIf the blob does not exist, the response will be \u0060404 Not Found\u0060.\n",
         "operationId": "CheckBlobExists",
         "parameters": [
           {
@@ -595,7 +595,7 @@
           {
             "lang": "Bash",
             "label": "cURL",
-            "source": "# HEAD to check if a blob exists\ncurl -I \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/sha256:abc123...\n"
+            "source": "# HEAD to check if a blob exists\ncurl -I \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/sha256:abc123...\n"
           }
         ]
       },
@@ -604,7 +604,7 @@
           "Blobs"
         ],
         "summary": "Retrieve blob",
-        "description": "Download the blob identified by digest from the registry.\n\nBlobs include image layers and configuration objects. Clients must use the digest from the manifest to retrieve a blob.\n\nThis endpoint may return a `307 Temporary Redirect` to a CDN or storage location. Clients must follow the redirect to obtain the actual blob content.\n\nThe blob content is typically a gzipped tarball (for layers) or JSON (for configs). The MIME type is usually `application/octet-stream`.\n",
+        "description": "Download the blob identified by digest from the registry.\n\nBlobs include image layers and configuration objects. Clients must use the digest from the manifest to retrieve a blob.\n\nThis endpoint may return a \u0060307 Temporary Redirect\u0060 to a CDN or storage location. Clients must follow the redirect to obtain the actual blob content.\n\nThe blob content is typically a gzipped tarball (for layers) or JSON (for configs). The MIME type is usually \u0060application/octet-stream\u0060.\n",
         "operationId": "GetBlob",
         "parameters": [
           {
@@ -662,7 +662,7 @@
                 "examples": {
                   "small-layer": {
                     "summary": "Example binary blob (gzipped tar layer)",
-                    "value": "<binary data not shown>"
+                    "value": "\u003Cbinary data not shown\u003E"
                   }
                 }
               }
@@ -697,7 +697,7 @@
           {
             "lang": "Bash",
             "label": "cURL",
-            "source": "# GET (download) a blob\ncurl -L \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/sha256:abc123... \\\n  -o layer.tar.gz\n"
+            "source": "# GET (download) a blob\ncurl -L \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/sha256:abc123... \\\n  -o layer.tar.gz\n"
           }
         ]
       }
@@ -708,7 +708,7 @@
           "Blobs"
         ],
         "summary": "Get blob upload status",
-        "description": "Retrieve the current status of an in-progress blob upload.\n\nThis is useful for:\n- Resuming an interrupted upload\n- Determining how many bytes have been accepted so far\n- Retrying from the correct offset in chunked uploads\n\nThe response includes the `Range` header indicating the byte range received so far, and a `Docker-Upload-UUID` for identifying the session.\n",
+        "description": "Retrieve the current status of an in-progress blob upload.\n\nThis is useful for:\n- Resuming an interrupted upload\n- Determining how many bytes have been accepted so far\n- Retrying from the correct offset in chunked uploads\n\nThe response includes the \u0060Range\u0060 header indicating the byte range received so far, and a \u0060Docker-Upload-UUID\u0060 for identifying the session.\n",
         "operationId": "GetBlobUploadStatus",
         "parameters": [
           {
@@ -776,7 +776,7 @@
           {
             "lang": "Bash",
             "label": "cURL",
-            "source": "# GET upload status\ncurl --include --request GET \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123\n"
+            "source": "# GET upload status\ncurl --include --request GET \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123\n"
           }
         ]
       },
@@ -785,7 +785,7 @@
           "Blobs"
         ],
         "summary": "Complete blob upload",
-        "description": "Complete the upload of a blob by finalizing an upload session.\n\nThis request must include the `digest` query parameter and optionally the last chunk of data. When the registry receives this request, it verifies the digest and stores the blob.\n\nThis endpoint supports:\n- Monolithic uploads (upload entire blob in this request)\n- Finalizing chunked uploads (last chunk plus `digest`)\n",
+        "description": "Complete the upload of a blob by finalizing an upload session.\n\nThis request must include the \u0060digest\u0060 query parameter and optionally the last chunk of data. When the registry receives this request, it verifies the digest and stores the blob.\n\nThis endpoint supports:\n- Monolithic uploads (upload entire blob in this request)\n- Finalizing chunked uploads (last chunk plus \u0060digest\u0060)\n",
         "operationId": "CompleteBlobUpload",
         "parameters": [
           {
@@ -828,7 +828,7 @@
               "examples": {
                 "layer-upload": {
                   "summary": "Layer tarball blob",
-                  "value": "<binary data not shown>"
+                  "value": "\u003Cbinary data not shown\u003E"
                 }
               }
             }
@@ -884,7 +884,7 @@
           {
             "lang": "Bash",
             "label": "cURL",
-            "source": "# PUT – complete upload (monolithic or final chunk)\ncurl -X PUT \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/octet-stream\" \\\n  --data-binary @layer.tar.gz \\\n  \"https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123?digest=sha256:abcd1234...\"\n"
+            "source": "# PUT \u2013 complete upload (monolithic or final chunk)\ncurl -X PUT \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  -H \u0022Content-Type: application/octet-stream\u0022 \\\n  --data-binary @layer.tar.gz \\\n  \u0022https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123?digest=sha256:abcd1234...\u0022\n"
           }
         ]
       },
@@ -893,7 +893,7 @@
           "Blobs"
         ],
         "summary": "Upload blob chunk",
-        "description": "Upload a chunk of a blob to an active upload session.\n\nUse this method for **chunked uploads**, especially for large blobs or when resuming interrupted uploads.\n\nThe client sends binary data using `PATCH`, optionally including a `Content-Range` header.\n\nAfter each chunk is accepted, the registry returns a `202 Accepted` response with:\n- `Range`: current byte range stored\n- `Docker-Upload-UUID`: identifier for the upload session\n- `Location`: URL to continue the upload or finalize with `PUT`\n",
+        "description": "Upload a chunk of a blob to an active upload session.\n\nUse this method for **chunked uploads**, especially for large blobs or when resuming interrupted uploads.\n\nThe client sends binary data using \u0060PATCH\u0060, optionally including a \u0060Content-Range\u0060 header.\n\nAfter each chunk is accepted, the registry returns a \u0060202 Accepted\u0060 response with:\n- \u0060Range\u0060: current byte range stored\n- \u0060Docker-Upload-UUID\u0060: identifier for the upload session\n- \u0060Location\u0060: URL to continue the upload or finalize with \u0060PUT\u0060\n",
         "operationId": "UploadBlobChunk",
         "parameters": [
           {
@@ -935,7 +935,7 @@
               "examples": {
                 "chunk-0": {
                   "summary": "Upload chunk 0 of a blob",
-                  "value": "<binary data not shown>"
+                  "value": "\u003Cbinary data not shown\u003E"
                 }
               }
             }
@@ -992,7 +992,7 @@
           {
             "lang": "Bash",
             "label": "cURL",
-            "source": "# PATCH – upload a chunk (first 64 KiB)\ncurl -X PATCH \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/octet-stream\" \\\n  --data-binary @chunk-0.bin \\\n  \"https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123\"\n"
+            "source": "# PATCH \u2013 upload a chunk (first 64 KiB)\ncurl -X PATCH \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  -H \u0022Content-Type: application/octet-stream\u0022 \\\n  --data-binary @chunk-0.bin \\\n  \u0022https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123\u0022\n"
           }
         ]
       },
@@ -1001,7 +1001,7 @@
           "Blobs"
         ],
         "summary": "Cancel blob upload",
-        "description": "Cancel an in-progress blob upload session.\n\nThis operation discards any data that has been uploaded and invalidates the upload session.\n\nUse this when:\n- An upload fails or is aborted mid-process\n- The client wants to clean up unused upload sessions\n\nAfter cancellation, the UUID is no longer valid and a new `POST` must be issued to restart the upload.\n",
+        "description": "Cancel an in-progress blob upload session.\n\nThis operation discards any data that has been uploaded and invalidates the upload session.\n\nUse this when:\n- An upload fails or is aborted mid-process\n- The client wants to clean up unused upload sessions\n\nAfter cancellation, the UUID is no longer valid and a new \u0060POST\u0060 must be issued to restart the upload.\n",
         "operationId": "CancelBlobUpload",
         "parameters": [
           {
@@ -1055,7 +1055,7 @@
           {
             "lang": "Bash",
             "label": "cURL",
-            "source": "# DELETE – cancel an upload session\ncurl -X DELETE \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123`\n"
+            "source": "# DELETE \u2013 cancel an upload session\ncurl -X DELETE \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  https://registry-1.docker.io/v2/library/ubuntu/blobs/uploads/abc123\u0060\n"
           }
         ]
       }
@@ -1063,10 +1063,6 @@
   },
   "components": {
     "schemas": {
-      "ExamplePayload": {
-        "type": "object",
-        "description": "Placeholder schema for path example refs"
-      },
       "GetImageManifest200DockerDistributionManifestV2JsonResponse": {
         "required": [
           "schemaVersion",
@@ -1082,7 +1078,7 @@
           },
           "mediaType": {
             "type": "string",
-            "example": "application/vnd.docker.distribution.manifest.v2+json"
+            "example": "application/vnd.docker.distribution.manifest.v2\u002Bjson"
           },
           "config": {
             "$ref": "#/components/schemas/GetImageManifest200DockerDistributionManifestV2JsonResponseConfig"
@@ -1110,7 +1106,7 @@
           },
           "mediaType": {
             "type": "string",
-            "example": "application/vnd.docker.distribution.manifest.v2+json"
+            "example": "application/vnd.docker.distribution.manifest.v2\u002Bjson"
           },
           "config": {
             "$ref": "#/components/schemas/PutImageManifestDockerDistributionManifestV2JsonRequestConfig"
@@ -1140,7 +1136,7 @@
         "properties": {
           "mediaType": {
             "type": "string",
-            "example": "application/vnd.docker.container.image.v1+json"
+            "example": "application/vnd.docker.container.image.v1\u002Bjson"
           },
           "size": {
             "type": "integer",
@@ -1179,7 +1175,7 @@
         "properties": {
           "mediaType": {
             "type": "string",
-            "example": "application/vnd.docker.container.image.v1+json"
+            "example": "application/vnd.docker.container.image.v1\u002Bjson"
           },
           "size": {
             "type": "integer",
@@ -1224,13 +1220,13 @@
   },
   "security": [
     {
-      "registryToken": [ ]
+      "registryToken": []
     }
   ],
   "tags": [
     {
       "name": "overview",
-      "description": "All endpoints in this API are prefixed by the version and repository name, for example:\n\n```\n/v2/<name>/\n```\n\nThis format provides structured access control and URI-based scoping of image operations.\n\nFor example, to interact with the `library/ubuntu` repository, use:\n\n```\n/v2/library/ubuntu/\n```\n\nRepository names must meet these requirements:\n1. Consist of path components matching `[a-z0-9]+(?:[._-][a-z0-9]+)*`\n2. If more than one component, they must be separated by `/`\n3. Full repository name must be fewer than 256 characters\n",
+      "description": "All endpoints in this API are prefixed by the version and repository name, for example:\n\n\u0060\u0060\u0060\n/v2/\u003Cname\u003E/\n\u0060\u0060\u0060\n\nThis format provides structured access control and URI-based scoping of image operations.\n\nFor example, to interact with the \u0060library/ubuntu\u0060 repository, use:\n\n\u0060\u0060\u0060\n/v2/library/ubuntu/\n\u0060\u0060\u0060\n\nRepository names must meet these requirements:\n1. Consist of path components matching \u0060[a-z0-9]\u002B(?:[._-][a-z0-9]\u002B)*\u0060\n2. If more than one component, they must be separated by \u0060/\u0060\n3. Full repository name must be fewer than 256 characters\n",
       "summary": "Overview",
       "kind": "info"
     },
@@ -1246,7 +1242,7 @@
     },
     {
       "name": "Manifests",
-      "description": "Image manifests are JSON documents that describe an image: its configuration blob, the digests of each layer blob, and metadata such as media‑types and annotations.\n",
+      "description": "Image manifests are JSON documents that describe an image: its configuration blob, the digests of each layer blob, and metadata such as media\u2011types and annotations.\n",
       "summary": "Manifests",
       "kind": "nav"
     },
@@ -1258,19 +1254,19 @@
     },
     {
       "name": "pull",
-      "description": "Pulling an image involves retrieving the manifest and downloading each of the image's layer blobs. This section outlines the general steps followed by a working example.\n\n1. [Get a bearer token for the repository](https://docs.docker.com/reference/api/registry/auth/).\n2. [Get the image manifest](#operation/GetImageManifest).\n3. If the response in the previous step is a multi-architecture manifest list, you must do the following:\n   - Parse the `manifests[]` array to locate the digest for your target platform (e.g., `linux/amd64`).\n   - [Get the image manifest](#operation/GetImageManifest) using the located digest.\n4. [Check if the blob exists](#operation/CheckBlobExists) before downloading. The client should send a `HEAD` request for each layer digest.\n5. [Download each layer blob](#operation/GetBlob) using the digest obtained from the manifest. The client should send a `GET` request for each layer digest.\n\nThe following bash script example pulls `library/ubuntu:latest` from Docker Hub.\n\n```bash\n#!/bin/bash\n\n# Step 1: Get a bearer token\nTOKEN=$(curl -s \"https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/ubuntu:pull\" | jq -r .token)\n\n# Step 2: Get the image manifest. In this example, an image manifest list is returned.\ncurl -s -H \"Authorization: Bearer $TOKEN\" \\\n     -H \"Accept: application/vnd.docker.distribution.manifest.list.v2+json\" \\\n     https://registry-1.docker.io/v2/library/ubuntu/manifests/latest \\\n     -o manifest-list.json\n\n# Step 3a: Parse the `manifests[]` array to locate the digest for your target platform (e.g., `linux/amd64`).\nIMAGE_MANIFEST_DIGEST=$(jq -r '.manifests[] | select(.platform.architecture == \"amd64\" and .platform.os == \"linux\") | .digest' manifest-list.json)\n\n# Step 3b: Get the platform-specific image manifest\ncurl -s -H \"Authorization: Bearer $TOKEN\" \\\n     -H \"Accept: application/vnd.docker.distribution.manifest.v2+json\" \\\n     https://registry-1.docker.io/v2/library/ubuntu/manifests/$IMAGE_MANIFEST_DIGEST \\\n     -o manifest.json\n\n# Step 4: Send a HEAD request to check if the layer blob exists\nDIGEST=$(jq -r '.layers[0].digest' manifest.json)\ncurl -I -H \"Authorization: Bearer $TOKEN\" \\\n     https://registry-1.docker.io/v2/library/ubuntu/blobs/$DIGEST\n\n# Step 5: Download the layer blob\ncurl -L -H \"Authorization: Bearer $TOKEN\" \\\n     https://registry-1.docker.io/v2/library/ubuntu/blobs/$DIGEST\n```\n\nThis example pulls the manifest and the first layer for the `ubuntu:latest` image on the `linux/amd64` platform. Repeat steps 4 and 5 for each digest in the `.layers[]` array in the manifest.\n",
+      "description": "Pulling an image involves retrieving the manifest and downloading each of the image\u0027s layer blobs. This section outlines the general steps followed by a working example.\n\n1. [Get a bearer token for the repository](https://docs.docker.com/reference/api/registry/auth/).\n2. [Get the image manifest](#operation/GetImageManifest).\n3. If the response in the previous step is a multi-architecture manifest list, you must do the following:\n   - Parse the \u0060manifests[]\u0060 array to locate the digest for your target platform (e.g., \u0060linux/amd64\u0060).\n   - [Get the image manifest](#operation/GetImageManifest) using the located digest.\n4. [Check if the blob exists](#operation/CheckBlobExists) before downloading. The client should send a \u0060HEAD\u0060 request for each layer digest.\n5. [Download each layer blob](#operation/GetBlob) using the digest obtained from the manifest. The client should send a \u0060GET\u0060 request for each layer digest.\n\nThe following bash script example pulls \u0060library/ubuntu:latest\u0060 from Docker Hub.\n\n\u0060\u0060\u0060bash\n#!/bin/bash\n\n# Step 1: Get a bearer token\nTOKEN=$(curl -s \u0022https://auth.docker.io/token?service=registry.docker.io\u0026scope=repository:library/ubuntu:pull\u0022 | jq -r .token)\n\n# Step 2: Get the image manifest. In this example, an image manifest list is returned.\ncurl -s -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n     -H \u0022Accept: application/vnd.docker.distribution.manifest.list.v2\u002Bjson\u0022 \\\n     https://registry-1.docker.io/v2/library/ubuntu/manifests/latest \\\n     -o manifest-list.json\n\n# Step 3a: Parse the \u0060manifests[]\u0060 array to locate the digest for your target platform (e.g., \u0060linux/amd64\u0060).\nIMAGE_MANIFEST_DIGEST=$(jq -r \u0027.manifests[] | select(.platform.architecture == \u0022amd64\u0022 and .platform.os == \u0022linux\u0022) | .digest\u0027 manifest-list.json)\n\n# Step 3b: Get the platform-specific image manifest\ncurl -s -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n     -H \u0022Accept: application/vnd.docker.distribution.manifest.v2\u002Bjson\u0022 \\\n     https://registry-1.docker.io/v2/library/ubuntu/manifests/$IMAGE_MANIFEST_DIGEST \\\n     -o manifest.json\n\n# Step 4: Send a HEAD request to check if the layer blob exists\nDIGEST=$(jq -r \u0027.layers[0].digest\u0027 manifest.json)\ncurl -I -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n     https://registry-1.docker.io/v2/library/ubuntu/blobs/$DIGEST\n\n# Step 5: Download the layer blob\ncurl -L -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n     https://registry-1.docker.io/v2/library/ubuntu/blobs/$DIGEST\n\u0060\u0060\u0060\n\nThis example pulls the manifest and the first layer for the \u0060ubuntu:latest\u0060 image on the \u0060linux/amd64\u0060 platform. Repeat steps 4 and 5 for each digest in the \u0060.layers[]\u0060 array in the manifest.\n",
       "summary": "Pulling Images",
       "kind": "info"
     },
     {
       "name": "push",
-      "description": "Pushing an image involves uploading any image blobs (such as the config or layers), and then uploading the manifest that references those blobs.\n\nThis section outlines the basic steps to push an image using the registry API.\n\n1. [Get a bearer token for the repository](https://docs.docker.com/reference/api/registry/auth/)\n\n2. [Check if the blob exists](#operation/CheckBlobExists) using a `HEAD` request for each blob digest.\n\n3. If the blob does not exist, [upload the blob](#operation/CompleteBlobUpload) using a monolithic `PUT` request:\n    - First, [initiate the upload](#operation/InitiateBlobUpload) with `POST`.\n    - Then [upload and complete](#operation/CompleteBlobUpload) with `PUT`.\n\n    **Note**:  Alternatively, you can upload the blob in multiple chunks by using `PATCH` requests to send each chunk, followed by a final `PUT` request to complete the upload. This is known as a [chunked upload](#operation/UploadBlobChunk) and is useful for large blobs or when resuming interrupted uploads.\n\n\n4. [Upload the image manifest](#operation/PutImageManifest) using a `PUT` request to associate the config and layers.\n\nThe following bash script example pushes a dummy config blob and manifest to `yourusername/helloworld:latest` on Docker Hub. You can replace `yourusername` with your Docker Hub username and `dckr_pat` with your Docker Hub personal access token.\n\n```bash\n#!/bin/bash\n\nUSERNAME=yourusername\nPASSWORD=dckr_pat\nREPO=yourusername/helloworld\nTAG=latest\nCONFIG=config.json\nMIME_TYPE=application/vnd.docker.container.image.v1+json\n\n# Step 1: Get a bearer token\nTOKEN=$(curl -s -u \"$USERNAME:$PASSWORD\" \\\n\"https://auth.docker.io/token?service=registry.docker.io&scope=repository:$REPO:push,pull\" \\\n| jq -r .token)\n\n# Create a dummy config blob and compute its digest\necho '{\"architecture\":\"amd64\",\"os\":\"linux\",\"config\":{},\"rootfs\":{\"type\":\"layers\",\"diff_ids\":[]}}' > $CONFIG\nDIGEST=\"sha256:$(sha256sum $CONFIG | awk '{print $1}')\"\n\n# Step 2: Check if the blob exists\nSTATUS=$(curl -s -o /dev/null -w \"%{http_code}\" -I \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/$REPO/blobs/$DIGEST)\n\nif [ \"$STATUS\" != \"200\" ]; then\n  # Step 3: Upload blob using monolithic upload\n  LOCATION=$(curl -sI -X POST \\\n    -H \"Authorization: Bearer $TOKEN\" \\\n    https://registry-1.docker.io/v2/$REPO/blobs/uploads/ \\\n    | grep -i Location | tr -d '\\r' | awk '{print $2}')\n\n  curl -s -X PUT \"$LOCATION&digest=$DIGEST\" \\\n    -H \"Authorization: Bearer $TOKEN\" \\\n    -H \"Content-Type: application/octet-stream\" \\\n    --data-binary @$CONFIG\nfi\n\n# Step 4: Upload the manifest that references the config blob\nMANIFEST=$(cat <<EOF\n{\n  \"schemaVersion\": 2,\n  \"mediaType\": \"application/vnd.docker.distribution.manifest.v2+json\",\n  \"config\": {\n    \"mediaType\": \"$MIME_TYPE\",\n    \"size\": $(stat -c%s $CONFIG),\n    \"digest\": \"$DIGEST\"\n  },\n  \"layers\": []\n}\nEOF\n)\n\ncurl -s -X PUT \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/vnd.docker.distribution.manifest.v2+json\" \\\n  -d \"$MANIFEST\" \\\n  https://registry-1.docker.io/v2/$REPO/manifests/$TAG\n\necho \"Pushed image to $REPO:$TAG\"\n```\n\nThis example pushes a minimal image with no layers. To push a complete image, repeat steps 2–3 for each layer and include the layer digests in the `layers[]` field of the manifest.\n",
+      "description": "Pushing an image involves uploading any image blobs (such as the config or layers), and then uploading the manifest that references those blobs.\n\nThis section outlines the basic steps to push an image using the registry API.\n\n1. [Get a bearer token for the repository](https://docs.docker.com/reference/api/registry/auth/)\n\n2. [Check if the blob exists](#operation/CheckBlobExists) using a \u0060HEAD\u0060 request for each blob digest.\n\n3. If the blob does not exist, [upload the blob](#operation/CompleteBlobUpload) using a monolithic \u0060PUT\u0060 request:\n    - First, [initiate the upload](#operation/InitiateBlobUpload) with \u0060POST\u0060.\n    - Then [upload and complete](#operation/CompleteBlobUpload) with \u0060PUT\u0060.\n\n    **Note**:  Alternatively, you can upload the blob in multiple chunks by using \u0060PATCH\u0060 requests to send each chunk, followed by a final \u0060PUT\u0060 request to complete the upload. This is known as a [chunked upload](#operation/UploadBlobChunk) and is useful for large blobs or when resuming interrupted uploads.\n\n\n4. [Upload the image manifest](#operation/PutImageManifest) using a \u0060PUT\u0060 request to associate the config and layers.\n\nThe following bash script example pushes a dummy config blob and manifest to \u0060yourusername/helloworld:latest\u0060 on Docker Hub. You can replace \u0060yourusername\u0060 with your Docker Hub username and \u0060dckr_pat\u0060 with your Docker Hub personal access token.\n\n\u0060\u0060\u0060bash\n#!/bin/bash\n\nUSERNAME=yourusername\nPASSWORD=dckr_pat\nREPO=yourusername/helloworld\nTAG=latest\nCONFIG=config.json\nMIME_TYPE=application/vnd.docker.container.image.v1\u002Bjson\n\n# Step 1: Get a bearer token\nTOKEN=$(curl -s -u \u0022$USERNAME:$PASSWORD\u0022 \\\n\u0022https://auth.docker.io/token?service=registry.docker.io\u0026scope=repository:$REPO:push,pull\u0022 \\\n| jq -r .token)\n\n# Create a dummy config blob and compute its digest\necho \u0027{\u0022architecture\u0022:\u0022amd64\u0022,\u0022os\u0022:\u0022linux\u0022,\u0022config\u0022:{},\u0022rootfs\u0022:{\u0022type\u0022:\u0022layers\u0022,\u0022diff_ids\u0022:[]}}\u0027 \u003E $CONFIG\nDIGEST=\u0022sha256:$(sha256sum $CONFIG | awk \u0027{print $1}\u0027)\u0022\n\n# Step 2: Check if the blob exists\nSTATUS=$(curl -s -o /dev/null -w \u0022%{http_code}\u0022 -I \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  https://registry-1.docker.io/v2/$REPO/blobs/$DIGEST)\n\nif [ \u0022$STATUS\u0022 != \u0022200\u0022 ]; then\n  # Step 3: Upload blob using monolithic upload\n  LOCATION=$(curl -sI -X POST \\\n    -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n    https://registry-1.docker.io/v2/$REPO/blobs/uploads/ \\\n    | grep -i Location | tr -d \u0027\\r\u0027 | awk \u0027{print $2}\u0027)\n\n  curl -s -X PUT \u0022$LOCATION\u0026digest=$DIGEST\u0022 \\\n    -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n    -H \u0022Content-Type: application/octet-stream\u0022 \\\n    --data-binary @$CONFIG\nfi\n\n# Step 4: Upload the manifest that references the config blob\nMANIFEST=$(cat \u003C\u003CEOF\n{\n  \u0022schemaVersion\u0022: 2,\n  \u0022mediaType\u0022: \u0022application/vnd.docker.distribution.manifest.v2\u002Bjson\u0022,\n  \u0022config\u0022: {\n    \u0022mediaType\u0022: \u0022$MIME_TYPE\u0022,\n    \u0022size\u0022: $(stat -c%s $CONFIG),\n    \u0022digest\u0022: \u0022$DIGEST\u0022\n  },\n  \u0022layers\u0022: []\n}\nEOF\n)\n\ncurl -s -X PUT \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  -H \u0022Content-Type: application/vnd.docker.distribution.manifest.v2\u002Bjson\u0022 \\\n  -d \u0022$MANIFEST\u0022 \\\n  https://registry-1.docker.io/v2/$REPO/manifests/$TAG\n\necho \u0022Pushed image to $REPO:$TAG\u0022\n\u0060\u0060\u0060\n\nThis example pushes a minimal image with no layers. To push a complete image, repeat steps 2\u20133 for each layer and include the layer digests in the \u0060layers[]\u0060 field of the manifest.\n",
       "summary": "Pushing Images",
       "kind": "info"
     },
     {
       "name": "delete",
-      "description": "Deleting an image involves removing its manifest by digest. You must first retrieve the manifest digest, then issue a `DELETE` request using that digest.\n\nOnly untagged manifests (or those not referenced by other tags or images) can be deleted. If a manifest is still referenced, the registry returns `403 Forbidden`.\n\n> **Note**\n>\n> Manifest deletion operations may experience latency and could return a `500 Internal Server Error` during deletion. The system automatically retries the deletion in the background, so the manifest will eventually be removed. You do not need to manually retry the request.\n\nThis section outlines the basic steps to delete an image using the registry API.\n\n1. [Get a bearer token for the repository](https://docs.docker.com/reference/api/registry/auth/).\n2. [Get the manifest](#operation/GetImageManifest) using the image's tag.\n3. Retrieve the `Docker-Content-Digest` header from the manifest response. This digest uniquely identifies the manifest.\n4. [Delete the manifest](#operation/DeleteImageManifest) using a `DELETE` request and the digest.\n\nThe following bash script example deletes the `latest` tag from `yourusername/helloworld` on Docker Hub. Replace `yourusername` with your Docker Hub username and `dckr_pat` with your Docker Hub personal access token.\n\n```bash\n#!/bin/bash\n\nUSERNAME=yourusername\nPASSWORD=dckr_pat\nREPO=yourusername/helloworld\nTAG=latest\n\n# Step 1: Get a bearer token\nTOKEN=$(curl -s -u \"$USERNAME:$PASSWORD\" \\\n  \"https://auth.docker.io/token?service=registry.docker.io&scope=repository:$REPO:pull,push,delete\" \\\n  | jq -r .token)\n\n# Step 2 and 3: Get the manifest and extract the digest from response headers\nDIGEST=$(curl -sI -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Accept: application/vnd.docker.distribution.manifest.v2+json\" \\\n  https://registry-1.docker.io/v2/$REPO/manifests/$TAG \\\n  | grep -i Docker-Content-Digest | tr -d '\\r' | awk '{print $2}')\n\necho \"Deleting manifest with digest: $DIGEST\"\n\n# Step 4: Delete the manifest by digest\ncurl -s -X DELETE \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  https://registry-1.docker.io/v2/$REPO/manifests/$DIGEST\n\necho \"Deleted image: $REPO@$DIGEST\"\n```\n\nThis example deletes the manifest for the `latest` tag. To fully delete all references to an image, ensure no other tags or referrers point to the same manifest digest.\n",
+      "description": "Deleting an image involves removing its manifest by digest. You must first retrieve the manifest digest, then issue a \u0060DELETE\u0060 request using that digest.\n\nOnly untagged manifests (or those not referenced by other tags or images) can be deleted. If a manifest is still referenced, the registry returns \u0060403 Forbidden\u0060.\n\n\u003E **Note**\n\u003E\n\u003E Manifest deletion operations may experience latency and could return a \u0060500 Internal Server Error\u0060 during deletion. The system automatically retries the deletion in the background, so the manifest will eventually be removed. You do not need to manually retry the request.\n\nThis section outlines the basic steps to delete an image using the registry API.\n\n1. [Get a bearer token for the repository](https://docs.docker.com/reference/api/registry/auth/).\n2. [Get the manifest](#operation/GetImageManifest) using the image\u0027s tag.\n3. Retrieve the \u0060Docker-Content-Digest\u0060 header from the manifest response. This digest uniquely identifies the manifest.\n4. [Delete the manifest](#operation/DeleteImageManifest) using a \u0060DELETE\u0060 request and the digest.\n\nThe following bash script example deletes the \u0060latest\u0060 tag from \u0060yourusername/helloworld\u0060 on Docker Hub. Replace \u0060yourusername\u0060 with your Docker Hub username and \u0060dckr_pat\u0060 with your Docker Hub personal access token.\n\n\u0060\u0060\u0060bash\n#!/bin/bash\n\nUSERNAME=yourusername\nPASSWORD=dckr_pat\nREPO=yourusername/helloworld\nTAG=latest\n\n# Step 1: Get a bearer token\nTOKEN=$(curl -s -u \u0022$USERNAME:$PASSWORD\u0022 \\\n  \u0022https://auth.docker.io/token?service=registry.docker.io\u0026scope=repository:$REPO:pull,push,delete\u0022 \\\n  | jq -r .token)\n\n# Step 2 and 3: Get the manifest and extract the digest from response headers\nDIGEST=$(curl -sI -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  -H \u0022Accept: application/vnd.docker.distribution.manifest.v2\u002Bjson\u0022 \\\n  https://registry-1.docker.io/v2/$REPO/manifests/$TAG \\\n  | grep -i Docker-Content-Digest | tr -d \u0027\\r\u0027 | awk \u0027{print $2}\u0027)\n\necho \u0022Deleting manifest with digest: $DIGEST\u0022\n\n# Step 4: Delete the manifest by digest\ncurl -s -X DELETE \\\n  -H \u0022Authorization: Bearer $TOKEN\u0022 \\\n  https://registry-1.docker.io/v2/$REPO/manifests/$DIGEST\n\necho \u0022Deleted image: $REPO@$DIGEST\u0022\n\u0060\u0060\u0060\n\nThis example deletes the manifest for the \u0060latest\u0060 tag. To fully delete all references to an image, ensure no other tags or referrers point to the same manifest digest.\n",
       "summary": "Deleting Images",
       "kind": "info"
     }
@@ -1293,5 +1289,11 @@
         "Blobs"
       ]
     }
-  ]
+  ],
+  "x-client-unused-schemas": {
+    "ExamplePayload": {
+      "type": "object",
+      "description": "Placeholder schema for path example refs"
+    }
+  }
 }
